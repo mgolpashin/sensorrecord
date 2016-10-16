@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -17,6 +18,7 @@ import com.google.android.gms.location.LocationServices;
 import org.androidannotations.annotations.CheckedChange;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.SeekBarProgressChange;
 import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private Date _activeRecordStart;
     private String fileFormat = "yyyy.MM.dd_HH:mm:ss";
-    private long DEFAULT_INTERVAL = 100;
+    private int MIN_INTERVAL = 10;
 
     private ArrayList<Sensor> sensors;
 
@@ -42,33 +44,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @ViewById
     Button btn_record;
-
     @ViewById
     Button btn_stop;
-
     @ViewById
     CheckBox check_gps;
-
     @ViewById
     SeekBar seek_gps;
-
+    @ViewById
+    TextView interval_gps;
     @ViewById
     CheckBox check_compass;
-
     @ViewById
     SeekBar seek_compass;
-
+    @ViewById
+    TextView interval_compass;
     @ViewById
     CheckBox check_gyro;
-
     @ViewById
     SeekBar seek_gyro;
-
+    @ViewById
+    TextView interval_gyro;
     @ViewById
     CheckBox check_accelerometer;
-
     @ViewById
     SeekBar seek_accelerometer;
+    @ViewById
+    TextView interval_accelerometer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +81,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private void _initSensors() {
         this.sensors = new ArrayList<>();
-        this.sensors.add(new Accelerometer(DEFAULT_INTERVAL));
-        this.sensors.add(new GPS(DEFAULT_INTERVAL));
-        this.sensors.add(new Gyro(DEFAULT_INTERVAL));
-        this.sensors.add(new Compass(DEFAULT_INTERVAL));
+        this.sensors.add(new Accelerometer(check_accelerometer, seek_accelerometer));
+        this.sensors.add(new GPS(check_gps, seek_gps));
+        this.sensors.add(new Gyro(check_gyro, seek_gyro));
+        this.sensors.add(new Compass(check_compass, seek_compass));
     }
 
 
     @Override
     protected void onStart() {
         _enableSeekBars(false);
+
         super.onStart();
     }
 
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         SimpleDateFormat format = new SimpleDateFormat(fileFormat);
         String fileName = format.format(_activeRecordStart);
 
-        writeCSVs(fileName);
+        writeCSVs();
 
         _activeRecordStart = null;
 
@@ -121,6 +123,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         btn_record.setVisibility(View.VISIBLE);
         btn_stop.setVisibility(View.GONE);
+    }
+
+    @SeekBarProgressChange
+    void seek_accelerometer(SeekBar seekBar, int progress) {
+        interval_accelerometer.setText(progress + MIN_INTERVAL + " millisec");
+    }
+
+    @SeekBarProgressChange
+    void seek_gps(SeekBar seekBar, int progress) {
+        interval_gps.setText(progress + MIN_INTERVAL + " millisec");
+    }
+
+    @SeekBarProgressChange
+    void seek_compass(SeekBar seekBar, int progress) {
+        interval_compass.setText(progress + MIN_INTERVAL + " millisec");
+    }
+
+    @SeekBarProgressChange
+    void seek_gyro(SeekBar seekBar, int progress) {
+        interval_gyro.setText(progress + MIN_INTERVAL +" millisec");
+    }
+
+
+    private void writeCSVs() {
+        for(Sensor s : sensors) {
+            s.writeToCSV();
+        }
     }
 
     private void _resetSensors() {
@@ -213,10 +242,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         seek_compass.setEnabled(enabled);
         seek_gps.setEnabled(enabled);
         seek_gyro.setEnabled(enabled);
-    }
-
-    private void writeCSVs(String fileName) {
-        //TODO Martin persist to filesystem
     }
 
     private void _initGoogleAPIClient() {

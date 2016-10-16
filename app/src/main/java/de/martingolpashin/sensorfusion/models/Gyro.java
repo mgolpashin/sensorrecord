@@ -1,5 +1,8 @@
 package de.martingolpashin.sensorfusion.models;
 
+import android.widget.CheckBox;
+import android.widget.SeekBar;
+
 import java.util.ArrayList;
 
 /**
@@ -8,13 +11,17 @@ import java.util.ArrayList;
 public class Gyro implements Sensor {
 
     private ArrayList<GyroData> data;
-    private long inverval;
     private boolean isActive;
 
-    public Gyro(long interval) {
+    private CheckBox checkBox;
+    private SeekBar seekBar;
+
+    public Gyro(CheckBox checkBox, SeekBar seekBar) {
         init();
         this.isActive = false;
-        this.inverval = interval;
+
+        this.checkBox = checkBox;
+        this.seekBar = seekBar;
     }
 
     @Override

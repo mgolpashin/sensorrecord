@@ -1,5 +1,8 @@
 package de.martingolpashin.sensorfusion.models;
 
+import android.widget.CheckBox;
+import android.widget.SeekBar;
+
 import java.util.ArrayList;
 
 /**
@@ -8,13 +11,17 @@ import java.util.ArrayList;
 public class GPS implements Sensor {
 
     private ArrayList<GPSData> data;
-    private long interval;
     private boolean isActive;
 
-    public GPS(long interval) {
+    private CheckBox checkBox;
+    private SeekBar seekBar;
+
+    public GPS(CheckBox checkBox, SeekBar seekBar) {
         init();
         this.isActive = false;
-        this.interval = interval;
+
+        this.checkBox = checkBox;
+        this.seekBar = seekBar;
     }
 
     @Override

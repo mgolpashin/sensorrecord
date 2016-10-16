@@ -1,5 +1,8 @@
 package de.martingolpashin.sensorfusion.models;
 
+import android.widget.CheckBox;
+import android.widget.SeekBar;
+
 import java.util.ArrayList;
 
 /**
@@ -8,13 +11,16 @@ import java.util.ArrayList;
 public class Compass implements Sensor {
 
     private ArrayList<CompassData> data;
-    private long interval;
-    private boolean isActive;;
+    private boolean isActive;
 
-    public Compass(long interval) {
+    private CheckBox checkBox;
+    private SeekBar seekBar;
+
+    public Compass(CheckBox checkBox, SeekBar seekBar) {
         init();
         this.isActive = false;
-        this.interval = interval;
+        this.checkBox = checkBox;
+        this.seekBar = seekBar;
     }
 
     @Override
