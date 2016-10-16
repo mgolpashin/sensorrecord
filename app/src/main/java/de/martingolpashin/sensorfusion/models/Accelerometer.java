@@ -8,9 +8,11 @@ import java.util.ArrayList;
 public class Accelerometer implements Sensor{
     private ArrayList<AccelerometerData> accelerometerData;
     private long interval;
+    private boolean isActive;
 
     public Accelerometer(long interval) {
         init();
+        this.isActive = false;
         this.interval = interval;
     }
 
@@ -27,5 +29,14 @@ public class Accelerometer implements Sensor{
     @Override
     public void init() {
         this.accelerometerData = new ArrayList<>();
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    @Override
+    public boolean getIsActive() {
+        return this.isActive;
     }
 }

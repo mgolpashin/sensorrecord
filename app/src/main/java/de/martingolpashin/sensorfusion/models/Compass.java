@@ -9,15 +9,16 @@ public class Compass implements Sensor {
 
     private ArrayList<CompassData> data;
     private long interval;
+    private boolean isActive;;
 
     public Compass(long interval) {
         init();
+        this.isActive = false;
         this.interval = interval;
     }
 
     @Override
     public void record() {
-
     }
 
     @Override
@@ -28,5 +29,14 @@ public class Compass implements Sensor {
     @Override
     public void init() {
         this.data = new ArrayList<>();
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    @Override
+    public boolean getIsActive() {
+        return this.isActive;
     }
 }

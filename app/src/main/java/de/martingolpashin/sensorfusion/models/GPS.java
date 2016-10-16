@@ -9,9 +9,11 @@ public class GPS implements Sensor {
 
     private ArrayList<GPSData> data;
     private long interval;
+    private boolean isActive;
 
     public GPS(long interval) {
         init();
+        this.isActive = false;
         this.interval = interval;
     }
 
@@ -28,5 +30,14 @@ public class GPS implements Sensor {
     @Override
     public void init() {
         this.data = new ArrayList<>();
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    @Override
+    public boolean getIsActive() {
+        return this.isActive;
     }
 }

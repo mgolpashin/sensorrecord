@@ -130,34 +130,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     void _record() {
-        if(check_accelerometer.isChecked()) {
-            _recordAccelerometer();
+        for(Sensor s : sensors) {
+            if(s.getIsActive()) {
+                s.record();
+            }
         }
-        if(check_compass.isChecked()) {
-            _recordCompass();
-        }
-        if(check_gyro.isChecked()) {
-            _recordGyro();
-        }
-        if(check_gps.isChecked()) {
-            _recordGPS();
-        }
-    }
-
-    private void _recordAccelerometer() {
-        //TODO release in Accelerometer.java
-    }
-
-    private void _recordCompass() {
-        //TODO release in Compass.java
-    }
-
-    private void _recordGyro() {
-        //TODO release in Gyro.java
-    }
-
-    private void _recordGPS() {
-        //TODO release in GPS.java
     }
 
     @CheckedChange
@@ -174,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @CheckedChange
     void check_compass(CheckBox check_compass, boolean isChecked) {
+        //TODO set isProperty of the corresponding sensor from list of sensors;
         seek_compass.setEnabled(isChecked);
         _checkRecordBtnEnabled();
     }

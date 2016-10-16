@@ -7,4 +7,6 @@ public interface Sensor {
     void record();
     void writeToCSV();
     void init();
+    void setIsActive(boolean isActive);
+    boolean getIsActive();
 }
