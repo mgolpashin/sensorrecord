@@ -8,11 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import org.androidannotations.annotations.CheckedChange;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -21,6 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.martingolpashin.sensorfusion.models.Accelerometer;
+import de.martingolpashin.sensorfusion.models.Compass;
+import de.martingolpashin.sensorfusion.models.GPS;
+import de.martingolpashin.sensorfusion.models.Gyro;
 import de.martingolpashin.sensorfusion.models.Sensor;
 
 @EActivity(R.layout.activity_main)
@@ -28,8 +34,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private Date _activeRecordStart;
     private String fileFormat = "yyyy.MM.dd_HH:mm:ss";
+    private long DEFAULT_INTERVAL = 100;
 
-    private ArrayList<Sensor> sensors = new ArrayList<>();
+    private ArrayList<Sensor> sensors;
 
     GoogleApiClient googleApiClient;
 
@@ -45,47 +52,193 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @ViewById
     SeekBar seek_gps;
 
+    @ViewById
+    CheckBox check_compass;
+
+    @ViewById
+    SeekBar seek_compass;
+
+    @ViewById
+    CheckBox check_gyro;
+
+    @ViewById
+    SeekBar seek_gyro;
+
+    @ViewById
+    CheckBox check_accelerometer;
+
+    @ViewById
+    SeekBar seek_accelerometer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         _initGoogleAPIClient();
-
-        seek_gps.setClickable(false);
+        _initSensors();
     }
+
+    private void _initSensors() {
+        this.sensors = new ArrayList<>();
+        this.sensors.add(new Accelerometer(DEFAULT_INTERVAL));
+        this.sensors.add(new GPS(DEFAULT_INTERVAL));
+        this.sensors.add(new Gyro(DEFAULT_INTERVAL));
+        this.sensors.add(new Compass(DEFAULT_INTERVAL));
+    }
+
 
     @Override
     protected void onStart() {
-        googleApiClient.connect();
+        _enableSeekBars(false);
         super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        googleApiClient.disconnect();
-        super.onStop();
     }
 
     @Click
     void btn_record() {
         _activeRecordStart = new Date();
 
-        btn_record.setVisibility(View.INVISIBLE);
+        _enableControls(false);
+
+        btn_record.setVisibility(View.GONE);
         btn_stop.setVisibility(View.VISIBLE);
+
+        _record();
     }
 
     @Click
     void btn_stop() {
         //stop recording
         SimpleDateFormat format = new SimpleDateFormat(fileFormat);
-
         String fileName = format.format(_activeRecordStart);
+
         writeCSVs(fileName);
 
         _activeRecordStart = null;
 
+        _resetSensors();
+
+        _resumeControls();
+
         btn_record.setVisibility(View.VISIBLE);
-        btn_stop.setVisibility(View.INVISIBLE);
+        btn_stop.setVisibility(View.GONE);
+    }
+
+    private void _resetSensors() {
+        for(Sensor s : this.sensors) {
+            s.init();
+        }
+    }
+
+    void _record() {
+        if(check_accelerometer.isChecked()) {
+            _recordAccelerometer();
+        }
+        if(check_compass.isChecked()) {
+            _recordCompass();
+        }
+        if(check_gyro.isChecked()) {
+            _recordGyro();
+        }
+        if(check_gps.isChecked()) {
+            _recordGPS();
+        }
+    }
+
+    private void _recordAccelerometer() {
+        //TODO release in Accelerometer.java
+    }
+
+    private void _recordCompass() {
+        //TODO release in Compass.java
+    }
+
+    private void _recordGyro() {
+        //TODO release in Gyro.java
+    }
+
+    private void _recordGPS() {
+        //TODO release in GPS.java
+    }
+
+    @CheckedChange
+    void check_gps(CheckBox check_gps, boolean isChecked) {
+        if(isChecked) {
+            googleApiClient.connect();
+        } else {
+            googleApiClient.disconnect();
+        }
+
+        seek_gps.setEnabled(isChecked);
+        _checkRecordBtnEnabled();
+    }
+
+    @CheckedChange
+    void check_compass(CheckBox check_compass, boolean isChecked) {
+        seek_compass.setEnabled(isChecked);
+        _checkRecordBtnEnabled();
+    }
+
+    @CheckedChange
+    void check_gyro(CheckBox check_gyro, boolean isChecked) {
+        seek_gyro.setEnabled(isChecked);
+        _checkRecordBtnEnabled();
+    }
+
+    @CheckedChange
+    void check_accelerometer(CheckBox check_accelerometer, boolean isChecked) {
+        seek_accelerometer.setEnabled(isChecked);
+        _checkRecordBtnEnabled();
+    }
+
+    private void _checkRecordBtnEnabled() {
+        if (!check_accelerometer.isChecked() &&
+                !check_gyro.isChecked() &&
+                !check_compass.isChecked() &&
+                !check_gps.isChecked()) {
+
+            btn_record.setEnabled(false);
+        } else {
+            btn_record.setEnabled(true);
+        }
+    }
+
+    private void _enableControls(boolean enabled) {
+        _enableCheckboxes(enabled);
+        _enableSeekBars(enabled);
+    }
+
+    private void _resumeControls() {
+        _enableCheckboxes(true);
+        if(check_gps.isChecked()) {
+            seek_gps.setEnabled(true);
+        }
+        if(check_compass.isChecked()) {
+            seek_compass.setEnabled(true);
+        }
+        if(check_accelerometer.isChecked()) {
+            seek_accelerometer.setEnabled(true);
+        }
+        if(check_gyro.isChecked()) {
+            seek_gyro.setEnabled(true);
+        }
+    }
+
+    private void _enableCheckboxes(boolean enabled) {
+        check_gps.setEnabled(enabled);
+        check_accelerometer.setEnabled(enabled);
+        check_compass.setEnabled(enabled);
+        check_gyro.setEnabled(enabled);
+    }
+
+    private void _enableSeekBars(boolean enabled) {
+        seek_accelerometer.setEnabled(enabled);
+        seek_compass.setEnabled(enabled);
+        seek_gps.setEnabled(enabled);
+        seek_gyro.setEnabled(enabled);
+    }
+
+    private void writeCSVs(String fileName) {
+        //TODO Martin persist to filesystem
     }
 
     private void _initGoogleAPIClient() {
@@ -100,6 +253,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle bundle) {
+        Toast.makeText(getApplicationContext(), "connected", Toast.LENGTH_SHORT).show();
+
         //TODO make user control frequency to get lastLocation
         /*
         mLocationRequest.setInterval(10000);
@@ -111,22 +266,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 //gpsRows.add(new GPSData(_calcMillis(), lastLocation));
             }
         }
-    }
-
-    private void registerSensor() {
-        //TODO implement
-    }
-
-    private void unregisterSensor() {
-        //TODO implement
-    }
-
-    private void lockSensors() {
-        //TODO implement
-    }
-
-    private void unlockSensors() {
-        //TODO implement
     }
 
     @Override
@@ -141,12 +280,5 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     private long _calcMillis() {
         return new Date().getTime() - _activeRecordStart.getTime();
-    }
-
-    private void writeCSVs(String fileName) {
-        //TODO persist records to fileSystem
-        for(Sensor s : sensors) {
-
-        }
     }
 }

@@ -120,6 +120,8 @@
         android:id="@+id/btn_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:enabled="false"
         android:text="Record"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
@@ -129,9 +131,10 @@
         android:id="@+id/btn_stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:text="Stop"
-        android:layout_alignTop="@+id/btn_record"
-        android:layout_weight="2"/>
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
