@@ -1,15 +1,15 @@
-package de.martingolpashin.sensorfusion.models;
+package de.martingolpashin.sensorrecord.models;
 
 import android.location.Location;
 
 /**
  * Created by martin on 14.10.16.
  */
-public class CompassData {
+public class AccelerometerData {
     private long millis;
     private String baseDir;
 
-    public CompassData(long milliseconds, Location location) {
+    public AccelerometerData(long milliseconds, Location location) {
         this.millis = milliseconds;
         this.baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
     }

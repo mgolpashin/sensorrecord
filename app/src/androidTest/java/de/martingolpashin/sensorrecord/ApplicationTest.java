@@ -1,4 +1,4 @@
-package de.martingolpashin.sensorfusion;
+package de.martingolpashin.sensorrecord;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

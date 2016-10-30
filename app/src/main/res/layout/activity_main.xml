@@ -3,145 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivityFragment"
-    android:layout_weight="4">
+    tools:context=".MainActivityFragment">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_margin="8dp">
 
-        <LinearLayout
+        <CheckBox
+            android:id="@+id/check_gps"
+            android:enabled="false"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:text="GPS"
+            android:checked="false" />
+
+        <EditText
+            android:id="@+id/edit_gps"
+            android:hint="Interval in milliseconds"
+            android:enabled="false"
+            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_margin="8dp">
-
-            <CheckBox
-                android:id="@+id/check_gps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="GPS"
-                android:checked="false" />
-
-            <SeekBar
-                android:id="@+id/seek_gps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indeterminate="false"
-                android:max="490"/>
-
-            <TextView
-                android:id="@+id/interval_gps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_margin="8dp">
-
-            <CheckBox
-                android:id="@+id/check_compass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Kompass"
-                android:checked="false"/>
-
-            <SeekBar
-                android:id="@+id/seek_compass"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indeterminate="false"
-                android:max="490"/>
-
-            <TextView
-                android:id="@+id/interval_compass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-
-        </LinearLayout>
+            android:indeterminate="false"/>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_margin="8dp">
-
-            <CheckBox
-                android:id="@+id/check_gyro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gyroskop"
-                android:checked="false"
-                android:layout_marginTop="16dp" />
-
-            <SeekBar
-                android:id="@+id/seek_gyro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indeterminate="false"
-                android:max="490"/>
-
-            <TextView
-                android:id="@+id/interval_gyro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_margin="8dp">
-
-            <CheckBox
-                android:id="@+id/check_accelerometer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Beschleunigung"
-                android:checked="false"
-                android:layout_marginTop="16dp" />
-
-            <SeekBar
-                android:id="@+id/seek_accelerometer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indeterminate="false"
-                android:max="490"/>
-
-            <TextView
-                android:id="@+id/interval_accelerometer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
-
-    </LinearLayout>
-
 
     <Button
         android:id="@+id/btn_record"
