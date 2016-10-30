@@ -8,12 +8,10 @@ import android.location.Location;
 public class GPSData {
     private long millis;
     private Location location;
-    private String baseDir;
 
     public GPSData(long milliseconds, Location location) {
         this.millis = milliseconds;
         this.location = location;
-        this.baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
     public Location getLocation() {

@@ -1,17 +1,34 @@
 package de.martingolpashin.sensorrecord.models;
 
-import android.location.Location;
-
 /**
  * Created by martin on 14.10.16.
  */
 public class AccelerometerData {
     private long millis;
-    private String baseDir;
+    private float x;
+    private float y;
+    private float z;
 
-    public AccelerometerData(long milliseconds, Location location) {
+    public AccelerometerData(long milliseconds, float x, float y, float z) {
         this.millis = milliseconds;
-        this.baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
+    public long getMillis() {
+        return millis;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getZ() {
+        return z;
+    }
 }

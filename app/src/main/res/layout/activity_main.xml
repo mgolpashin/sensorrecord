@@ -9,14 +9,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1"
-        android:layout_margin="8dp">
+        android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/check_gps"
+            android:padding="8dp"
             android:enabled="false"
-            android:layout_width="80dp"
+            android:layout_width="160dp"
             android:layout_height="80dp"
             android:text="GPS"
             android:checked="false" />
@@ -25,32 +24,65 @@
             android:id="@+id/edit_gps"
             android:hint="Interval in milliseconds"
             android:enabled="false"
+            android:padding="8dp"
             android:inputType="number"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:indeterminate="false"/>
-
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_record"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:enabled="false"
-        android:text="Record"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btn_stop"
-        android:layout_width="wrap_content"
+        <CheckBox
+            android:id="@+id/check_accelerometer"
+            android:enabled="false"
+            android:padding="8dp"
+            android:layout_width="160dp"
+            android:layout_height="80dp"
+            android:text="Accelerometer"
+            android:checked="false" />
+
+        <EditText
+            android:id="@+id/edit_accelerometer"
+            android:hint="Interval in milliseconds"
+            android:padding="8dp"
+            android:enabled="false"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="false"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="Stop"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal" />
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btn_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:enabled="false"
+            android:text="Record"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="Stop"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
 
 </LinearLayout>
