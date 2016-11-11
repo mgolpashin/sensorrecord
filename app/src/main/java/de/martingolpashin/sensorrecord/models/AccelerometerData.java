@@ -31,4 +31,9 @@ public class AccelerometerData {
     public float getZ() {
         return z;
     }
+
+    @Override
+    public String toString() {
+        return this.getMillis() + ";" + this.getX() + ";" + this.getY() + ";" + this.getZ() + ";" + System.getProperty("line.separator");
+    }
 }

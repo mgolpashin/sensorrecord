@@ -22,30 +22,26 @@ import java.util.TimerTask;
  * Created by martin on 16.10.16.
  */
 @EBean
-public class Accelerometer implements Sensor, SensorEventListener {
+public class Gyroscope implements Sensor, SensorEventListener {
 
-    private ArrayList<AccelerometerData> data;
+    private ArrayList<GyroData> data;
     private Timer timer;
     private boolean isRecording;
     private boolean isActive;
     private int interval;
 
-    private float x;
-    private float y;
-    private float z;
-
     private SensorManager sensorManager;
-    android.hardware.Sensor accelerometer;
+    private android.hardware.Sensor gyroscope;
 
     private Context context;
 
-    public Accelerometer(Context context) {
+    public Gyroscope(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
         this.isRecording = false;
         this.timer = new Timer();
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        this.accelerometer = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LINEAR_ACCELERATION);
+        this.gyroscope = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_GYROSCOPE);
     }
 
     @Override
@@ -56,7 +52,7 @@ public class Accelerometer implements Sensor, SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new AccelerometerData(new Date().getTime() - startDate, x, y, z));
+                    data.add(new GyroData(new Date().getTime()/* TODO Martin add data */));
                 }
             }
         }, 0, interval);
@@ -73,7 +69,7 @@ public class Accelerometer implements Sensor, SensorEventListener {
         try {
             FileWriter fw = new FileWriter(file);
             fw.write("Date;X;Y;Z;" + System.getProperty("line.separator"));
-            for(AccelerometerData entry : data) {
+            for(GyroData entry : data) {
                 fw.write(entry.toString());
             }
 
@@ -87,7 +83,7 @@ public class Accelerometer implements Sensor, SensorEventListener {
     public void setActive(boolean isActive) {
         this.isActive = isActive;
         if(isActive) {
-            this.sensorManager.registerListener(this, this.accelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+            this.sensorManager.registerListener(this, this.gyroscope, SensorManager.SENSOR_DELAY_FASTEST);
         } else {
             this.sensorManager.unregisterListener(this);
         }
@@ -144,10 +140,8 @@ public class Accelerometer implements Sensor, SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         android.hardware.Sensor sensor = event.sensor;
 
-        if (sensor.getType() == android.hardware.Sensor.TYPE_LINEAR_ACCELERATION) {
-            this.x = event.values[0];
-            this.y = event.values[1];
-            this.z = event.values[2];
+        if (sensor.getType() == android.hardware.Sensor.TYPE_ACCELEROMETER) {
+            //TODO Martin capture values
         }
     }
 
