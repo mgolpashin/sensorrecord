@@ -1,13 +1,10 @@
 package de.martingolpashin.sensorrecord.models;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Environment;
-import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
 import org.androidannotations.annotations.EBean;
 
@@ -17,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import de.martingolpashin.sensorrecord.utils.FileHandler;
 
 /**
  * Created by martin on 16.10.16.
@@ -43,7 +42,6 @@ public class Accelerometer implements Sensor, SensorEventListener {
         this.context = context;
         this.data = new ArrayList<>();
         this.isRecording = false;
-        this.timer = new Timer();
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LINEAR_ACCELERATION);
     }
@@ -51,6 +49,7 @@ public class Accelerometer implements Sensor, SensorEventListener {
     @Override
     public void record() {
         this.isRecording = true;
+        this.timer = new Timer();
         final long startDate = new Date().getTime();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -65,9 +64,7 @@ public class Accelerometer implements Sensor, SensorEventListener {
     @Override
     public void writeToCSV(String fileName) {
         this.timer.cancel();
-        File dir = isExternalStorageWritable() && ContextCompat.checkSelfPermission(this.context,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ? getExternalStorageDir() : getInternalStorageDir();
-
+        File dir = FileHandler.getWritableStorageDir(this.context);
         File file = new File(dir, fileName + "_Accelerometer.csv");
 
         try {
@@ -79,6 +76,7 @@ public class Accelerometer implements Sensor, SensorEventListener {
 
             fw.flush();
             fw.close();
+            Toast.makeText(context, file.getAbsolutePath() + " created", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -115,29 +113,6 @@ public class Accelerometer implements Sensor, SensorEventListener {
     public void reset() {
         this.data = new ArrayList<>();
         this.isRecording = false;
-    }
-
-    private boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
-    }
-
-    private File getExternalStorageDir() {
-        File dir = new File(Environment.getExternalStorageDirectory() + File.separator + "SensorRecord" + File.separator);
-        if(!dir.exists()) {
-            dir.mkdir();
-        }
-
-        return dir;
-    }
-
-    private File getInternalStorageDir() {
-        File dir = new File(context.getFilesDir() + File.separator + "SensorRecord" + File.separator);
-        if(!dir.exists()) {
-            dir.mkdir();
-        }
-
-        return dir;
     }
 
     @Override

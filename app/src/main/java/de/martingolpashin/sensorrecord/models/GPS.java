@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.martingolpashin.sensorrecord.utils.FileHandler;
+
 /**
  * Created by martin on 16.10.16.
  */
@@ -44,7 +46,6 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
         this.context = context;
         this.data = new ArrayList<>();
         this.isRecording = false;
-        this.timer = new Timer();
 
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(this.context)
@@ -58,6 +59,7 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
     @Override
     public void record() {
         this.isRecording = true;
+        this.timer = new Timer();
         final long startDate = new Date().getTime();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -72,9 +74,7 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
     @Override
     public void writeToCSV(String fileName) {
         this.timer.cancel();
-        File dir = isExternalStorageWritable() && ContextCompat.checkSelfPermission(this.context,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ? getExternalStorageDir() : getInternalStorageDir();
-
+        File dir = FileHandler.getWritableStorageDir(this.context);
         File file = new File(dir, fileName + "_GPS.csv");
 
         try {
@@ -119,6 +119,7 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
     public void onConnected(Bundle bundle) {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(this.interval);
+        //TODO check
         LocationServices.FusedLocationApi.requestLocationUpdates(this.googleApiClient, locationRequest, this);
     }
 
@@ -145,31 +146,5 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
-    }
-
-    private boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
-    private File getExternalStorageDir() {
-        File dir = new File(Environment.getExternalStorageDirectory() + File.separator + "SensorRecord" + File.separator);
-        if(!dir.exists()) {
-            dir.mkdir();
-        }
-
-        return dir;
-    }
-
-    private File getInternalStorageDir() {
-        File dir = new File(context.getFilesDir() + File.separator + "SensorRecord" + File.separator);
-        if(!dir.exists()) {
-            dir.mkdir();
-        }
-
-        return dir;
     }
 }

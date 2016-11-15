@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +25,13 @@ import org.androidannotations.annotations.ViewById;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import de.martingolpashin.sensorrecord.R;
 import de.martingolpashin.sensorrecord.activities.MainActivity;
 import de.martingolpashin.sensorrecord.models.Accelerometer;
 import de.martingolpashin.sensorrecord.models.Compass;
+import de.martingolpashin.sensorrecord.adapter.FileAdapter;
 import de.martingolpashin.sensorrecord.models.GPS;
 import de.martingolpashin.sensorrecord.models.Gyroscope;
 
@@ -37,7 +41,6 @@ public class MainFragment extends Fragment {
     MainActivity activity;
 
     private Date _activeRecordStart;
-    private String fileFormat = "yyyy.MM.dd_HH:mm:ss";
 
     @ViewById
     ImageButton btn_record;
@@ -64,6 +67,11 @@ public class MainFragment extends Fragment {
     @ViewById
     EditText edit_compass;
 
+    @ViewById
+    RecyclerView file_list;
+    RecyclerView.LayoutManager layoutManager;
+    RecyclerView.Adapter adapter;
+
     @Bean
     GPS gps;
     @Bean
@@ -82,6 +90,12 @@ public class MainFragment extends Fragment {
     void _initSensors() {
         this.activity = (MainActivity) getActivity();
 
+        file_list.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this.activity);
+        file_list.setLayoutManager(layoutManager);
+        adapter = new FileAdapter(this.activity.getFiles());
+        file_list.setAdapter(adapter);
+
         this.activity.sensors = new ArrayList<>();
 
         if(ContextCompat.checkSelfPermission(this.activity,
@@ -92,13 +106,10 @@ public class MainFragment extends Fragment {
             this.activity.sensors.add(gyro);
             check_gyro.setEnabled(true);
         }
-
         this.activity.sensors.add(accelerometer);
         check_accelerometer.setEnabled(true);
-
         this.activity.sensors.add(gyro);
         check_gyro.setEnabled(true);
-
         this.activity.sensors.add(compass);
         check_compass.setEnabled(true);
     }
@@ -130,7 +141,8 @@ public class MainFragment extends Fragment {
 
     @Click
     void btn_stop() {
-        SimpleDateFormat format = new SimpleDateFormat(fileFormat);
+        String fileFormat = "yyyy.MM.dd_HH:mm:ss";
+        SimpleDateFormat format = new SimpleDateFormat(fileFormat, Locale.GERMAN);
         String fileName = format.format(_activeRecordStart);
         activity.writeCSVs(fileName);
         _activeRecordStart = null;
@@ -142,28 +154,28 @@ public class MainFragment extends Fragment {
     }
 
     @CheckedChange
-    void check_gps(CheckBox check_gps, boolean isChecked) {
+    void check_gps(boolean isChecked) {
         edit_gps.setEnabled(isChecked);
         gps.setActive(isChecked);
         checkRecordBtnEnabled();
     }
 
     @CheckedChange
-    void check_accelerometer(CheckBox check_accelerometer, boolean isChecked) {
+    void check_accelerometer(boolean isChecked) {
         edit_accelerometer.setEnabled(isChecked);
         accelerometer.setActive(isChecked);
         checkRecordBtnEnabled();
     }
 
     @CheckedChange
-    void check_gyro(CheckBox check_gyro, boolean isChecked) {
+    void check_gyro(boolean isChecked) {
         edit_gyro.setEnabled(isChecked);
         gyro.setActive(isChecked);
         checkRecordBtnEnabled();
     }
 
     @CheckedChange
-    void check_compass(CheckBox check_gyro, boolean isChecked) {
+    void check_compass(boolean isChecked) {
         edit_compass.setEnabled(isChecked);
         compass.setActive(isChecked);
         checkRecordBtnEnabled();
@@ -179,29 +191,21 @@ public class MainFragment extends Fragment {
         check_gps.setEnabled(enabled);
         check_accelerometer.setEnabled(enabled);
         check_gyro.setEnabled(enabled);
-        /*
         check_compass.setEnabled(enabled);
-        check_gyro.setEnabled(enabled);
-        */
     }
 
     private void _enableIntervalControls(boolean enabled) {
         edit_gps.setEnabled(enabled);
         edit_accelerometer.setEnabled(enabled);
         edit_gyro.setEnabled(enabled);
-        /*
-        seek_compass.setEnabled(enabled);
-        seek_gyro.setEnabled(enabled);
-        */
+        edit_compass.setEnabled(enabled);
     }
 
     private void checkRecordBtnEnabled() {
-        //TODO Martin make sure that interval is set
-        if (/* !check_gyro.isChecked() &&
-                !check_compass.isChecked() && */
-                !check_accelerometer.isChecked() &&
-                        !check_gps.isChecked() &&
-                        !check_gyro.isChecked()) {
+        if (!check_compass.isChecked() &&
+            !check_accelerometer.isChecked() &&
+            !check_gps.isChecked() &&
+            !check_gyro.isChecked()) {
 
             btn_record.setEnabled(false);
         } else {
@@ -213,16 +217,5 @@ public class MainFragment extends Fragment {
     private void _resumeControls() {
         _enableCheckboxes(true);
         _enableIntervalControls(true);
-        /*
-        if(check_compass.isChecked()) {
-            seek_compass.setEnabled(true);
-        }
-        if(check_accelerometer.isChecked()) {
-            seek_accelerometer.setEnabled(true);
-        }
-        if(check_gyro.isChecked()) {
-            seek_gyro.setEnabled(true);
-        }
-        */
     }
 }

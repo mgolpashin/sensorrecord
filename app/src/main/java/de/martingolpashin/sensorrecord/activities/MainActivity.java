@@ -5,20 +5,25 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.androidannotations.annotations.EActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import de.martingolpashin.sensorrecord.R;
 import de.martingolpashin.sensorrecord.models.Sensor;
+import de.martingolpashin.sensorrecord.utils.FileHandler;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity{
-
+    private File[] files;
     public ArrayList<Sensor> sensors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //TODO Martin get files;
+        this.files = FileHandler.getWritableStorageDir(this).listFiles();
     }
 
     //TODO Martin save state when rotating device
@@ -46,5 +51,9 @@ public class MainActivity extends AppCompatActivity{
                 s.record();
             }
         }
+    }
+
+    public File[] getFiles() {
+        return files;
     }
 }
