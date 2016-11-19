@@ -29,17 +29,17 @@ import java.util.Locale;
 
 import de.martingolpashin.sensorrecord.R;
 import de.martingolpashin.sensorrecord.activities.MainActivity;
+import de.martingolpashin.sensorrecord.adapter.FileAdapter;
 import de.martingolpashin.sensorrecord.models.Accelerometer;
 import de.martingolpashin.sensorrecord.models.Compass;
-import de.martingolpashin.sensorrecord.adapter.FileAdapter;
 import de.martingolpashin.sensorrecord.models.GPS;
 import de.martingolpashin.sensorrecord.models.Gyroscope;
 
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends Fragment {
 
+    private static final int MIN_INTERVAL = 10;
     MainActivity activity;
-
     private Date _activeRecordStart;
 
     @ViewById
@@ -81,6 +81,11 @@ public class MainFragment extends Fragment {
     @Bean
     Compass compass;
 
+    //TODO add interval validation
+    //use design library?
+
+    //TODO add new files
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
@@ -111,7 +116,8 @@ public class MainFragment extends Fragment {
         this.activity.sensors.add(gyro);
         check_gyro.setEnabled(true);
         this.activity.sensors.add(compass);
-        check_compass.setEnabled(true);
+        //TODO activate when implemented
+        //check_compass.setEnabled(true);
     }
 
     @Click

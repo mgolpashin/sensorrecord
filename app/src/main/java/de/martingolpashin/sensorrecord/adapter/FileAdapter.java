@@ -1,5 +1,9 @@
 package de.martingolpashin.sensorrecord.adapter;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.List;
 
 import de.martingolpashin.sensorrecord.R;
 
@@ -16,7 +21,7 @@ import de.martingolpashin.sensorrecord.R;
  * Created by martin on 13.11.16.
  */
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
-    private File[] files;
+    private List<File> files;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout layout;
@@ -32,7 +37,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public FileAdapter(File[] files) {
+    public FileAdapter(List<File> files) {
         this.files = files;
     }
 
@@ -46,35 +51,55 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         ImageButton deleteButton = (ImageButton) layout.findViewById(R.id.button_delete);
         ViewHolder vh = new ViewHolder(layout, fileName, deleteButton);
 
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO open file
-            }
-        });
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO open delete dialog
-            }
-        });
-
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final File file = files.get(position);
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.fileName.setText(files[position].getName());
+        holder.fileName.setText(file.getName());
+
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
+                openFileIntent.setData(Uri.fromFile(file));
+                v.getContext().startActivity(openFileIntent);
+            }
+        });
+
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(v.getContext())
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Delete File")
+                        .setMessage("Are you sure you want to delete " + file.getName() + " ?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(file.delete()) {
+                                    files.remove(position);
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, files.size());
+                                }
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+                //TODO open delete dialog
+            }
+        });
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return files.length;
+        return files.size();
     }
 }

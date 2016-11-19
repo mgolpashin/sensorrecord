@@ -7,6 +7,8 @@ import org.androidannotations.annotations.EActivity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import de.martingolpashin.sensorrecord.R;
 import de.martingolpashin.sensorrecord.models.Sensor;
@@ -14,7 +16,7 @@ import de.martingolpashin.sensorrecord.utils.FileHandler;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity{
-    private File[] files;
+    private List<File> files;
     public ArrayList<Sensor> sensors;
 
     @Override
@@ -22,12 +24,9 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TODO Martin get files;
-        this.files = FileHandler.getWritableStorageDir(this).listFiles();
+        this.files = new ArrayList<>(Arrays.asList(FileHandler.getWritableStorageDir(this).listFiles()));
     }
 
-    //TODO Martin save state when rotating device
-    //TODO Martin fix bug when recording multiple times
     //TODO Martin setMinInterval
 
     public void writeCSVs(String fileName) {
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    public File[] getFiles() {
+    public List<File> getFiles() {
         return files;
     }
 }
