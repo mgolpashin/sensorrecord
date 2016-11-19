@@ -79,9 +79,13 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
 
         try {
             FileWriter fw = new FileWriter(file);
-            fw.write("Date;Latitude;Longitude;" + System.getProperty("line.separator"));
+            fw.write("Date;Latitude;Longitude;Altitude" + System.getProperty("line.separator"));
             for(GPSData entry : data) {
-                fw.write(entry.getMillis() + ";" + entry.getLocation().getLatitude() + ";" + entry.getLocation().getLongitude() + ";" + System.getProperty("line.separator"));
+                fw.write(entry.getMillis() + ";" +
+                        entry.getLocation().getLatitude() + ";" +
+                        entry.getLocation().getLongitude() + ";" +
+                        entry.getLocation().getAltitude() + ";" +
+                        System.getProperty("line.separator"));
             }
 
             fw.flush();
