@@ -4,7 +4,6 @@ import android.content.Context;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.widget.Toast;
 
 import org.androidannotations.annotations.EBean;
 
@@ -62,7 +61,7 @@ public class Accelerometer implements Sensor, SensorEventListener {
     }
 
     @Override
-    public void writeToCSV(String fileName) {
+    public File writeToCSV(String fileName) {
         this.timer.cancel();
         File dir = FileHandler.getWritableStorageDir(this.context);
         File file = new File(dir, fileName + "_Accelerometer.csv");
@@ -76,9 +75,11 @@ public class Accelerometer implements Sensor, SensorEventListener {
 
             fw.flush();
             fw.close();
-            Toast.makeText(context, file.getAbsolutePath() + " created", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, file.getAbsolutePath() + " created", Toast.LENGTH_LONG).show();
+            return file;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 

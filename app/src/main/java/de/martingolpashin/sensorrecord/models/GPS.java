@@ -72,7 +72,7 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
     }
 
     @Override
-    public void writeToCSV(String fileName) {
+    public File writeToCSV(String fileName) {
         this.timer.cancel();
         File dir = FileHandler.getWritableStorageDir(this.context);
         File file = new File(dir, fileName + "_GPS.csv");
@@ -90,9 +90,11 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
 
             fw.flush();
             fw.close();
-            Toast.makeText(context, file.getAbsolutePath() + " created", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, file.getAbsolutePath() + " created", Toast.LENGTH_LONG).show();
+            return file;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 

@@ -23,6 +23,8 @@ import de.martingolpashin.sensorrecord.R;
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     private List<File> files;
 
+    //TODO Add sensor icon
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout layout;
         public TextView fileName;
@@ -34,6 +36,11 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             this.fileName = fileName;
             this.deleteButton = deleteButton;
         }
+    }
+
+    public void add(File file) {
+        this.files.add(0, file);
+        notifyItemChanged(0);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -58,8 +65,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final File file = files.get(position);
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+
         holder.fileName.setText(file.getName());
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
@@ -75,10 +81,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(v.getContext())
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Delete File")
-                        .setMessage("Are you sure you want to delete " + file.getName() + " ?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Delete File")
+                    .setMessage("Are you sure you want to delete " + file.getName() + " ?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if(file.delete()) {
@@ -88,13 +94,11 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                                 }
                             }
 
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-                //TODO open delete dialog
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
             }
         });
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -102,4 +106,5 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     public int getItemCount() {
         return files.size();
     }
+
 }

@@ -29,7 +29,6 @@ import java.util.Locale;
 
 import de.martingolpashin.sensorrecord.R;
 import de.martingolpashin.sensorrecord.activities.MainActivity;
-import de.martingolpashin.sensorrecord.adapter.FileAdapter;
 import de.martingolpashin.sensorrecord.models.Accelerometer;
 import de.martingolpashin.sensorrecord.models.Compass;
 import de.martingolpashin.sensorrecord.models.GPS;
@@ -69,8 +68,6 @@ public class MainFragment extends Fragment {
 
     @ViewById
     RecyclerView file_list;
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerView.Adapter adapter;
 
     @Bean
     GPS gps;
@@ -96,10 +93,8 @@ public class MainFragment extends Fragment {
         this.activity = (MainActivity) getActivity();
 
         file_list.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this.activity);
-        file_list.setLayoutManager(layoutManager);
-        adapter = new FileAdapter(this.activity.getFiles());
-        file_list.setAdapter(adapter);
+        file_list.setLayoutManager(new LinearLayoutManager(this.activity));
+        file_list.setAdapter(this.activity.getAdapter());
 
         this.activity.sensors = new ArrayList<>();
 
@@ -147,7 +142,7 @@ public class MainFragment extends Fragment {
 
     @Click
     void btn_stop() {
-        String fileFormat = "yyyy.MM.dd_HH:mm:ss";
+        String fileFormat = "yyyy-MM-dd_HH:mm:ss";
         SimpleDateFormat format = new SimpleDateFormat(fileFormat, Locale.GERMAN);
         String fileName = format.format(_activeRecordStart);
         activity.writeCSVs(fileName);
