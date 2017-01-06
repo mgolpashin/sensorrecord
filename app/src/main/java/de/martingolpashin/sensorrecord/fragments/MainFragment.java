@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -89,23 +90,22 @@ public class MainFragment extends Fragment {
     }
 
     @AfterViews
-    void _initSensors() {
+    void init() {
+        checkRecordBtnEnabled();
         this.activity = (MainActivity) getActivity();
 
         file_list.setHasFixedSize(true);
         file_list.setLayoutManager(new LinearLayoutManager(this.activity));
         file_list.setAdapter(this.activity.getAdapter());
 
+        //add sensors
         this.activity.sensors = new ArrayList<>();
-
         if(ContextCompat.checkSelfPermission(this.activity,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             this.activity.sensors.add(gps);
             check_gps.setEnabled(true);
-
-            this.activity.sensors.add(gyro);
-            check_gyro.setEnabled(true);
         }
+
         this.activity.sensors.add(accelerometer);
         check_accelerometer.setEnabled(true);
         this.activity.sensors.add(gyro);
@@ -117,27 +117,40 @@ public class MainFragment extends Fragment {
 
     @Click
     void btn_record() {
-        if(check_gps.isChecked()) {
+        if(!hasMinInterval()) {
+            Toast.makeText(this.activity, "Minimum interval is " + MIN_INTERVAL, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(edit_gps.isEnabled() && !edit_gps.getText().toString().equals("")) {
             gps.setInterval(Integer.parseInt(edit_gps.getText().toString()));
         }
-        if(check_accelerometer.isChecked()) {
+        if(edit_accelerometer.isEnabled() && !edit_accelerometer.getText().toString().equals("")) {
             accelerometer.setInterval(Integer.parseInt(edit_accelerometer.getText().toString()));
         }
-        if(check_gyro.isChecked()) {
+        if(edit_gyro.isEnabled() && !edit_gyro.getText().toString().equals("")) {
             gyro.setInterval(Integer.parseInt(edit_gyro.getText().toString()));
         }
-        if(check_compass.isChecked()) {
+        if(edit_compass.isEnabled() && !edit_compass.getText().toString().equals("")) {
             compass.setInterval(Integer.parseInt(edit_compass.getText().toString()));
         }
 
         _activeRecordStart = new Date();
-
         _enableControls(false);
 
         btn_record.setVisibility(View.GONE);
         btn_stop.setVisibility(View.VISIBLE);
 
         activity.record();
+    }
+
+    private boolean hasMinInterval() {
+        return !(
+                    (edit_gps.isEnabled() && (edit_gps.getText().toString().equals("") || (Integer.parseInt(edit_gps.getText().toString())) < MIN_INTERVAL)) ||
+                    (edit_accelerometer.isEnabled() && (edit_accelerometer.getText().toString().equals("") || (Integer.parseInt(edit_accelerometer.getText().toString())) < MIN_INTERVAL)) ||
+                    (edit_gyro.isEnabled() && (edit_gyro.getText().toString().equals("") || (Integer.parseInt(edit_gyro.getText().toString())) < MIN_INTERVAL)) ||
+                    (edit_compass.isEnabled() && (edit_compass.getText().toString().equals("") || (Integer.parseInt(edit_compass.getText().toString())) < MIN_INTERVAL))
+                );
     }
 
     @Click
@@ -196,10 +209,18 @@ public class MainFragment extends Fragment {
     }
 
     private void _enableIntervalControls(boolean enabled) {
-        edit_gps.setEnabled(enabled);
-        edit_accelerometer.setEnabled(enabled);
-        edit_gyro.setEnabled(enabled);
-        edit_compass.setEnabled(enabled);
+        if (check_gps.isChecked()) {
+            edit_gps.setEnabled(enabled);
+        }
+        if (check_accelerometer.isChecked()) {
+            edit_accelerometer.setEnabled(enabled);
+        }
+        if(check_gyro.isChecked()) {
+            edit_gyro.setEnabled(enabled);
+        }
+        if(check_compass.isChecked()) {
+            edit_compass.setEnabled(enabled);
+        }
     }
 
     private void checkRecordBtnEnabled() {

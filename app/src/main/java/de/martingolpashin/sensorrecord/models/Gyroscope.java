@@ -64,7 +64,7 @@ public class Gyroscope implements Sensor, SensorEventListener {
 
         try {
             FileWriter fw = new FileWriter(file);
-            fw.write("Date;X;Y;Z;" + System.getProperty("line.separator"));
+            fw.write("Milliseconds;X;Y;Z;" + System.getProperty("line.separator"));
             for(GyroData entry : data) {
                 fw.write(entry.toString());
             }
@@ -107,6 +107,11 @@ public class Gyroscope implements Sensor, SensorEventListener {
     }
 
     @Override
+    public int getInterval() {
+        return interval;
+    }
+
+    @Override
     public void reset() {
         this.data = new ArrayList<>();
         this.isRecording = false;
@@ -123,6 +128,5 @@ public class Gyroscope implements Sensor, SensorEventListener {
 
     @Override
     public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
-
     }
 }

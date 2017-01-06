@@ -13,4 +13,5 @@ public interface Sensor {
     boolean isActive();
     void setRecording(boolean isRecording);
     boolean isRecording();
+    int getInterval();
 }

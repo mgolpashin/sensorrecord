@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity{
     private List<File> files;
     public ArrayList<Sensor> sensors;
 
-    RecyclerView.LayoutManager layoutManager;
     FileAdapter adapter;
 
     @Override
@@ -47,7 +46,10 @@ public class MainActivity extends AppCompatActivity{
         for(Sensor s : sensors) {
             if(s.isRecording()) {
                 File file = s.writeToCSV(fileName);
-                this.adapter.add(file);
+                if(file != null) {
+                    this.adapter.add(file);
+                }
+
                 s.setRecording(false);
             }
         }
@@ -71,10 +73,7 @@ public class MainActivity extends AppCompatActivity{
         return adapter;
     }
 
-    public List<File> getFiles() {
-        return files;
-    }
-
+    /*
     public int compare(File o1, File o2) {
         String name1 = o1.getName();
         String name2 = o2.getName();
@@ -85,4 +84,5 @@ public class MainActivity extends AppCompatActivity{
         }
         return res;
     }
+    */
 }

@@ -68,7 +68,7 @@ public class Accelerometer implements Sensor, SensorEventListener {
 
         try {
             FileWriter fw = new FileWriter(file);
-            fw.write("Date;X;Y;Z;" + System.getProperty("line.separator"));
+            fw.write("Milliseconds;X;Y;Z;" + System.getProperty("line.separator"));
             for(AccelerometerData entry : data) {
                 fw.write(entry.toString());
             }
@@ -104,6 +104,11 @@ public class Accelerometer implements Sensor, SensorEventListener {
 
     public void setInterval(int interval) {
         this.interval = interval;
+    }
+
+    @Override
+    public int getInterval() {
+        return interval;
     }
 
     public boolean isRecording() {

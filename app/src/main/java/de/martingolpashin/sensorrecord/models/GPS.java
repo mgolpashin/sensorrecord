@@ -79,7 +79,7 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
 
         try {
             FileWriter fw = new FileWriter(file);
-            fw.write("Date;Latitude;Longitude;Altitude" + System.getProperty("line.separator"));
+            fw.write("Milliseconds;Latitude;Longitude;Altitude" + System.getProperty("line.separator"));
             for(GPSData entry : data) {
                 fw.write(entry.getMillis() + ";" +
                         entry.getLocation().getLatitude() + ";" +
@@ -94,6 +94,7 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
             return file;
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(this.context, "Fehler beim Speichern der Datei", Toast.LENGTH_LONG).show();
             return null;
         }
     }
@@ -119,6 +120,11 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
 
     public void setInterval(int interval) {
         this.interval = interval;
+    }
+
+    @Override
+    public int getInterval() {
+        return interval;
     }
 
     @Override

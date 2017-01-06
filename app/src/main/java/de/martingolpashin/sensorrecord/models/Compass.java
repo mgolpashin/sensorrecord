@@ -65,7 +65,7 @@ public class Compass implements Sensor, SensorEventListener {
 
         try {
             FileWriter fw = new FileWriter(file);
-            fw.write("Date;X;Y;Z;" + System.getProperty("line.separator"));
+            fw.write("Milliseconds;X;Y;Z;" + System.getProperty("line.separator"));
             for(CompassData entry : data) {
                 fw.write(entry.toString());
             }
@@ -97,6 +97,11 @@ public class Compass implements Sensor, SensorEventListener {
     @Override
     public void setRecording(boolean isRecording) {
         this.isRecording = isRecording;
+    }
+
+    @Override
+    public int getInterval() {
+        return interval;
     }
 
     public void setInterval(int interval) {
