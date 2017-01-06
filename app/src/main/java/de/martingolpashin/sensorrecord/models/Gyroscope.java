@@ -60,7 +60,7 @@ public class Gyroscope implements Sensor, SensorEventListener {
     public File writeToCSV(String fileName) {
         this.timer.cancel();
         File dir = FileHandler.getWritableStorageDir(this.context);
-        File file = new File(dir, fileName + "_Accelerometer.csv");
+        File file = new File(dir, fileName + "_Gyroscope.csv");
 
         try {
             FileWriter fw = new FileWriter(file);

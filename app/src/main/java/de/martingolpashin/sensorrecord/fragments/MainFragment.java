@@ -38,6 +38,7 @@ import de.martingolpashin.sensorrecord.models.Gyroscope;
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends Fragment {
 
+    private boolean isRecordingEnabled = false;
     private static final int MIN_INTERVAL = 10;
     MainActivity activity;
     private Date _activeRecordStart;
@@ -91,7 +92,6 @@ public class MainFragment extends Fragment {
 
     @AfterViews
     void init() {
-        checkRecordBtnEnabled();
         this.activity = (MainActivity) getActivity();
 
         file_list.setHasFixedSize(true);
@@ -117,6 +117,11 @@ public class MainFragment extends Fragment {
 
     @Click
     void btn_record() {
+        if(!this.isRecordingEnabled) {
+            Toast.makeText(this.activity, "No active Sensor", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         if(!hasMinInterval()) {
             Toast.makeText(this.activity, "Minimum interval is " + MIN_INTERVAL, Toast.LENGTH_LONG).show();
             return;
@@ -229,9 +234,9 @@ public class MainFragment extends Fragment {
             !check_gps.isChecked() &&
             !check_gyro.isChecked()) {
 
-            btn_record.setEnabled(false);
+            this.isRecordingEnabled = false;
         } else {
-            btn_record.setEnabled(true);
+            this.isRecordingEnabled = true;
         }
     }
 

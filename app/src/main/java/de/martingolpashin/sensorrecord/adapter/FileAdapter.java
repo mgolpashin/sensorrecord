@@ -81,6 +81,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(v.getContext())
+                    //TODO change alert icon
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Delete File")
                     .setMessage("Are you sure you want to delete " + file.getName() + " ?")
