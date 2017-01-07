@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,26 +30,15 @@ import de.martingolpashin.sensorrecord.utils.FileHandler;
  * Created by martin on 16.10.16.
  */
 @EBean
-public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
-
-    private ArrayList<GPSData> data;
+public class GPS extends BaseSensor implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     private Location lastKnownLocation;
-    private Timer timer;
-    private boolean isRecording;
-    private boolean isActive;
-    private int interval;
-
-    private Context context;
-
     GoogleApiClient googleApiClient;
 
     public GPS(Context context) {
-        this.context = context;
-        this.data = new ArrayList<>();
-        this.isRecording = false;
+        super(context);
 
         if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(this.context)
+            googleApiClient = new GoogleApiClient.Builder(context)
             .addConnectionCallbacks(this)
             .addOnConnectionFailedListener(this)
             .addApi(LocationServices.API)
@@ -57,14 +47,11 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
     }
 
     @Override
-    public void record() {
-        this.isRecording = true;
-        this.timer = new Timer();
-        final long startDate = new Date().getTime();
+    public void scheduleRecording() {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if(isRecording) {
+                if (isRecording) {
                     data.add(new GPSData(new Date().getTime() - startDate, lastKnownLocation));
                 }
             }
@@ -74,23 +61,23 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
     @Override
     public File writeToCSV(String fileName) {
         this.timer.cancel();
-        File dir = FileHandler.getWritableStorageDir(this.context);
+        File dir = FileHandler.getWritableStorageDir(context);
         File file = new File(dir, fileName + "_GPS.csv");
 
         try {
             FileWriter fw = new FileWriter(file);
             fw.write("Milliseconds;Latitude;Longitude;Altitude" + System.getProperty("line.separator"));
-            for(GPSData entry : data) {
+            for(Object obj : data) {
+                GPSData entry = (GPSData) obj;
                 fw.write(entry.getMillis() + ";" +
                         entry.getLocation().getLatitude() + ";" +
                         entry.getLocation().getLongitude() + ";" +
-                        entry.getLocation().getAltitude() + ";" +
+                        entry.getLocation().getAltitude() + ";" + //TODO Altitude is 0
                         System.getProperty("line.separator"));
             }
 
             fw.flush();
             fw.close();
-            //Toast.makeText(context, file.getAbsolutePath() + " created", Toast.LENGTH_LONG).show();
             return file;
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,32 +86,14 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
         }
     }
 
-    public void setActive(boolean isActive) {
-        this.isActive = isActive;
+    @Override
+    public void setActive(boolean isActiveNew) {
+        isActive = isActiveNew;
         if (isActive) {
             googleApiClient.connect();
         } else {
             googleApiClient.disconnect();
         }
-    }
-
-    @Override
-    public boolean isActive() {
-        return this.isActive;
-    }
-
-    @Override
-    public void setRecording(boolean isRecording) {
-        this.isRecording = isRecording;
-    }
-
-    public void setInterval(int interval) {
-        this.interval = interval;
-    }
-
-    @Override
-    public int getInterval() {
-        return interval;
     }
 
     @Override
@@ -135,9 +104,6 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
         LocationServices.FusedLocationApi.requestLocationUpdates(this.googleApiClient, locationRequest, this);
     }
 
-    public boolean isRecording() {
-        return isRecording;
-    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -145,18 +111,8 @@ public class GPS implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleA
     }
 
     @Override
-    public void reset() {
-        this.data = new ArrayList<>();
-        this.isRecording = false;
-    }
+    public void onConnectionSuspended(int i) {}
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-    }
+    public void onConnectionFailed(ConnectionResult connectionResult) {}
 }

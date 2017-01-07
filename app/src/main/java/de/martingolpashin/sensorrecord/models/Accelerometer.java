@@ -9,9 +9,7 @@ import org.androidannotations.annotations.EBean;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import de.martingolpashin.sensorrecord.utils.FileHandler;
@@ -20,14 +18,7 @@ import de.martingolpashin.sensorrecord.utils.FileHandler;
  * Created by martin on 16.10.16.
  */
 @EBean
-public class Accelerometer implements Sensor, SensorEventListener {
-
-    private ArrayList<AccelerometerData> data;
-    private Timer timer;
-    private boolean isRecording;
-    private boolean isActive;
-    private int interval;
-
+public class Accelerometer extends BaseSensor implements Sensor, SensorEventListener {
     private float x;
     private float y;
     private float z;
@@ -35,21 +26,14 @@ public class Accelerometer implements Sensor, SensorEventListener {
     private SensorManager sensorManager;
     android.hardware.Sensor accelerometer;
 
-    private Context context;
-
     public Accelerometer(Context context) {
-        this.context = context;
-        this.data = new ArrayList<>();
-        this.isRecording = false;
+        super(context);
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LINEAR_ACCELERATION);
     }
 
     @Override
-    public void record() {
-        this.isRecording = true;
-        this.timer = new Timer();
-        final long startDate = new Date().getTime();
+    public void scheduleRecording() {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -69,13 +53,13 @@ public class Accelerometer implements Sensor, SensorEventListener {
         try {
             FileWriter fw = new FileWriter(file);
             fw.write("Milliseconds;X;Y;Z;" + System.getProperty("line.separator"));
-            for(AccelerometerData entry : data) {
+            for(Object obj: data) {
+                AccelerometerData entry = (AccelerometerData) obj;
                 fw.write(entry.toString());
             }
 
             fw.flush();
             fw.close();
-            //Toast.makeText(context, file.getAbsolutePath() + " created", Toast.LENGTH_LONG).show();
             return file;
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,35 +74,6 @@ public class Accelerometer implements Sensor, SensorEventListener {
         } else {
             this.sensorManager.unregisterListener(this);
         }
-    }
-
-    @Override
-    public boolean isActive() {
-        return this.isActive;
-    }
-
-    @Override
-    public void setRecording(boolean isRecording) {
-        this.isRecording = isRecording;
-    }
-
-    public void setInterval(int interval) {
-        this.interval = interval;
-    }
-
-    @Override
-    public int getInterval() {
-        return interval;
-    }
-
-    public boolean isRecording() {
-        return isRecording;
-    }
-
-    @Override
-    public void reset() {
-        this.data = new ArrayList<>();
-        this.isRecording = false;
     }
 
     @Override

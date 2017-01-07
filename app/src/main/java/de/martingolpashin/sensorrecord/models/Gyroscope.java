@@ -9,9 +9,6 @@ import org.androidannotations.annotations.EBean;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import de.martingolpashin.sensorrecord.utils.FileHandler;
@@ -20,37 +17,23 @@ import de.martingolpashin.sensorrecord.utils.FileHandler;
  * Created by martin on 16.10.16.
  */
 @EBean
-public class Gyroscope implements Sensor, SensorEventListener {
-
-    private ArrayList<GyroData> data;
-    private Timer timer;
-    private boolean isRecording;
-    private boolean isActive;
-    private int interval;
-
+public class Gyroscope extends BaseSensor implements Sensor, SensorEventListener {
     private SensorManager sensorManager;
     private android.hardware.Sensor gyroscope;
 
-    private Context context;
-
     public Gyroscope(Context context) {
-        this.context = context;
-        this.data = new ArrayList<>();
-        this.isRecording = false;
+        super(context);
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.gyroscope = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_GYROSCOPE);
     }
 
     @Override
-    public void record() {
-        this.isRecording = true;
-        this.timer = new Timer();
-        final long startDate = new Date().getTime();
+    public void scheduleRecording() {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new GyroData(new Date().getTime()/* TODO Martin add data */));
+                    data.add(new GyroData(startDate/* TODO Martin add data */));
                 }
             }
         }, 0, interval);
@@ -65,13 +48,13 @@ public class Gyroscope implements Sensor, SensorEventListener {
         try {
             FileWriter fw = new FileWriter(file);
             fw.write("Milliseconds;X;Y;Z;" + System.getProperty("line.separator"));
-            for(GyroData entry : data) {
+            for(Object obj: data) {
+                GyroData entry = (GyroData) obj;
                 fw.write(entry.toString());
             }
 
             fw.flush();
             fw.close();
-            //Toast.makeText(context, file.getAbsolutePath() + " created", Toast.LENGTH_LONG).show();
             return file;
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,35 +69,6 @@ public class Gyroscope implements Sensor, SensorEventListener {
         } else {
             this.sensorManager.unregisterListener(this);
         }
-    }
-
-    @Override
-    public boolean isActive() {
-        return this.isActive;
-    }
-
-    @Override
-    public void setRecording(boolean isRecording) {
-        this.isRecording = isRecording;
-    }
-
-    public void setInterval(int interval) {
-        this.interval = interval;
-    }
-
-    public boolean isRecording() {
-        return isRecording;
-    }
-
-    @Override
-    public int getInterval() {
-        return interval;
-    }
-
-    @Override
-    public void reset() {
-        this.data = new ArrayList<>();
-        this.isRecording = false;
     }
 
     @Override
