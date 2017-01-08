@@ -100,7 +100,7 @@ public class GPS extends BaseSensor implements Sensor, GoogleApiClient.Connectio
     public void onConnected(Bundle bundle) {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(this.interval);
-        //TODO check
+        //TODO add permission check
         LocationServices.FusedLocationApi.requestLocationUpdates(this.googleApiClient, locationRequest, this);
     }
 

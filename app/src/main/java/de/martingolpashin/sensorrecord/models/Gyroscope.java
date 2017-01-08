@@ -9,6 +9,7 @@ import org.androidannotations.annotations.EBean;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Date;
 import java.util.TimerTask;
 
 import de.martingolpashin.sensorrecord.utils.FileHandler;
@@ -18,6 +19,10 @@ import de.martingolpashin.sensorrecord.utils.FileHandler;
  */
 @EBean
 public class Gyroscope extends BaseSensor implements Sensor, SensorEventListener {
+    private float x;
+    private float y;
+    private float z;
+
     private SensorManager sensorManager;
     private android.hardware.Sensor gyroscope;
 
@@ -33,7 +38,8 @@ public class Gyroscope extends BaseSensor implements Sensor, SensorEventListener
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new GyroData(startDate/* TODO Martin add data */));
+                    //TODO Martin check data
+                    data.add(new GyroData(new Date().getTime() - startDate, x, y, z));
                 }
             }
         }, 0, interval);
@@ -75,8 +81,11 @@ public class Gyroscope extends BaseSensor implements Sensor, SensorEventListener
     public void onSensorChanged(SensorEvent event) {
         android.hardware.Sensor sensor = event.sensor;
 
-        if (sensor.getType() == android.hardware.Sensor.TYPE_ACCELEROMETER) {
-            //TODO Martin capture values
+        if (sensor.getType() == android.hardware.Sensor.TYPE_GYROSCOPE) {
+            //TODO Martin check values
+            this.x = event.values[0];
+            this.y = event.values[1];
+            this.z = event.values[2];
         }
     }
 

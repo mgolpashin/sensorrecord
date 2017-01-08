@@ -19,6 +19,10 @@ import de.martingolpashin.sensorrecord.utils.FileHandler;
  */
 @EBean
 public class Compass extends BaseSensor implements Sensor, SensorEventListener {
+    private float x;
+    private float y;
+    private float z;
+
     private SensorManager sensorManager;
     android.hardware.Sensor compass;
 
@@ -35,7 +39,7 @@ public class Compass extends BaseSensor implements Sensor, SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new CompassData(new Date().getTime() - startDate));
+                    data.add(new CompassData(new Date().getTime() - startDate, x, y, z));
                 }
             }
         }, 0, interval);
@@ -79,7 +83,10 @@ public class Compass extends BaseSensor implements Sensor, SensorEventListener {
         android.hardware.Sensor sensor = event.sensor;
 
         if (sensor.getType() == android.hardware.Sensor.TYPE_MAGNETIC_FIELD) {
-            //TODO Martin store values
+            //TODO Martin check values
+            this.x = event.values[0];
+            this.y = event.values[1];
+            this.z = event.values[2];
         }
     }
 

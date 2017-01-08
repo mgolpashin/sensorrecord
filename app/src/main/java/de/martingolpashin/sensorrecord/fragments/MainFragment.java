@@ -80,10 +80,7 @@ public class MainFragment extends Fragment {
     @Bean
     Compass compass;
 
-    //TODO add interval validation
     //use design library?
-
-    //TODO add new files
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -111,8 +108,7 @@ public class MainFragment extends Fragment {
         this.activity.sensors.add(gyro);
         check_gyro.setEnabled(true);
         this.activity.sensors.add(compass);
-        //TODO activate when implemented
-        //check_compass.setEnabled(true);
+        check_compass.setEnabled(true);
     }
 
     @Click

@@ -5,17 +5,35 @@ package de.martingolpashin.sensorrecord.models;
  */
 public class GyroData {
     private long millis;
+    private float x;
+    private float y;
+    private float z;
 
-    public GyroData(long milliseconds) {
+    public GyroData(long milliseconds, float x, float y, float z) {
         this.millis = milliseconds;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     public long getMillis() {
         return millis;
     }
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getZ() {
+        return z;
+    }
+
     @Override
     public String toString() {
-        return this.getMillis() + ";" /* TODO Martin write data */ + System.getProperty("line.separator");
+        return this.getMillis() + ";" + this.getX() + ";" + this.getY() + ";" + this.getZ() + ";" + System.getProperty("line.separator");
     }
 }

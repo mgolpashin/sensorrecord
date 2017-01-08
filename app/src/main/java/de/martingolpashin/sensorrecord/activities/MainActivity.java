@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity{
         this.adapter = new FileAdapter(this.files);
     }
 
-    //TODO Martin setMinInterval
-
     public void writeCSVs(String fileName) {
         for(Sensor s : sensors) {
             if(s.isRecording()) {

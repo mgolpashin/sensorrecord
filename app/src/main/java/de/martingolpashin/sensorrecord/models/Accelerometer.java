@@ -29,7 +29,7 @@ public class Accelerometer extends BaseSensor implements Sensor, SensorEventList
     public Accelerometer(Context context) {
         super(context);
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        this.accelerometer = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LINEAR_ACCELERATION);
+        this.accelerometer = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class Accelerometer extends BaseSensor implements Sensor, SensorEventList
     public void onSensorChanged(SensorEvent event) {
         android.hardware.Sensor sensor = event.sensor;
 
-        if (sensor.getType() == android.hardware.Sensor.TYPE_LINEAR_ACCELERATION) {
+        if (sensor.getType() == android.hardware.Sensor.TYPE_ACCELEROMETER) {
             this.x = event.values[0];
             this.y = event.values[1];
             this.z = event.values[2];

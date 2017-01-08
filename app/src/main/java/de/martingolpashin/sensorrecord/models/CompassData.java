@@ -5,11 +5,35 @@ package de.martingolpashin.sensorrecord.models;
  */
 public class CompassData {
     private long millis;
-    private String baseDir;
+    private float x;
+    private float y;
+    private float z;
 
-    public CompassData(long milliseconds) {
+    public CompassData(long milliseconds, float x, float y, float z) {
         this.millis = milliseconds;
-        this.baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
+    public long getMillis() {
+        return millis;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getZ() {
+        return z;
+    }
+
+    @Override
+    public String toString() {
+        return this.getMillis() + ";" + this.getX() + ";" + this.getY() + ";" + this.getZ() + ";" + System.getProperty("line.separator");
+    }
 }
