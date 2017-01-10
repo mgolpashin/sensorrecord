@@ -40,7 +40,8 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 
     public void add(File file) {
         this.files.add(0, file);
-        notifyItemChanged(0);
+        //notifyDataSetChanged();
+        notifyItemInserted(0);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -61,7 +62,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         return vh;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final File file = files.get(position);

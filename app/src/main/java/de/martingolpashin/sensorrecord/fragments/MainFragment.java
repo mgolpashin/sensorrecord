@@ -163,6 +163,7 @@ public class MainFragment extends Fragment {
 
         btn_record.setVisibility(View.VISIBLE);
         btn_stop.setVisibility(View.GONE);
+        file_list.scrollToPosition(0);
     }
 
     @Click
