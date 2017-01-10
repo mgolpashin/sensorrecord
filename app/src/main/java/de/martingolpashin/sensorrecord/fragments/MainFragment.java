@@ -4,6 +4,7 @@ package de.martingolpashin.sensorrecord.fragments;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,7 +38,6 @@ import de.martingolpashin.sensorrecord.models.Gyroscope;
 
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends Fragment {
-
     private boolean isRecordingEnabled = false;
     private static final int MIN_INTERVAL = 10;
     MainActivity activity;
@@ -97,12 +97,9 @@ public class MainFragment extends Fragment {
 
         //add sensors
         this.activity.sensors = new ArrayList<>();
-        if(ContextCompat.checkSelfPermission(this.activity,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            this.activity.sensors.add(gps);
-            check_gps.setEnabled(true);
-        }
 
+        this.activity.sensors.add(gps);
+        check_gps.setEnabled(true);
         this.activity.sensors.add(accelerometer);
         check_accelerometer.setEnabled(true);
         this.activity.sensors.add(gyro);
@@ -168,10 +165,17 @@ public class MainFragment extends Fragment {
         btn_stop.setVisibility(View.GONE);
     }
 
-    @CheckedChange
-    void check_gps(boolean isChecked) {
-        edit_gps.setEnabled(isChecked);
-        gps.setActive(isChecked);
+    @Click
+    void check_gps(CheckBox check_gps) {
+        if(check_gps.isChecked() && ContextCompat.checkSelfPermission(this.activity,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            check_gps.setChecked(false);
+            ActivityCompat.requestPermissions(this.activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, this.activity.PERMISSION_ACCESS_FINE_LOCATION);
+            return;
+        }
+
+        edit_gps.setEnabled(check_gps.isChecked());
+        gps.setActive(check_gps.isChecked());
         checkRecordBtnEnabled();
     }
 
@@ -235,7 +239,6 @@ public class MainFragment extends Fragment {
             this.isRecordingEnabled = true;
         }
     }
-
 
     private void _resumeControls() {
         _enableCheckboxes(true);

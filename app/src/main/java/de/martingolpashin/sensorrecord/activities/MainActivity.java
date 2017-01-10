@@ -1,8 +1,10 @@
 package de.martingolpashin.sensorrecord.activities;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import org.androidannotations.annotations.EActivity;
 
@@ -20,6 +22,8 @@ import de.martingolpashin.sensorrecord.utils.FileHandler;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity{
+    public final int PERMISSION_ACCESS_FINE_LOCATION = 1;
+
     private List<File> files;
     public ArrayList<Sensor> sensors;
 
@@ -71,16 +75,13 @@ public class MainActivity extends AppCompatActivity{
         return adapter;
     }
 
-    /*
-    public int compare(File o1, File o2) {
-        String name1 = o1.getName();
-        String name2 = o2.getName();
-
-        int res = String.CASE_INSENSITIVE_ORDER.compare(name1, name2);
-        if (res == 0) {
-            res = name1.compareTo(name2);
+    @Override
+    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_ACCESS_FINE_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, "Please grant permission to use the gps sensor", Toast.LENGTH_SHORT).show();
+                }
         }
-        return res;
     }
-    */
 }
