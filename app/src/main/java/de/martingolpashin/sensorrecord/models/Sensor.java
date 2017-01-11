@@ -6,7 +6,7 @@ import java.io.File;
  * Created by martin on 07.01.17.
  */
 public interface Sensor {
-    File writeToCSV(String fileName);
+    File writeToCSV(String fileName, File dir);
     void scheduleRecording();
     void reset();
     void record();

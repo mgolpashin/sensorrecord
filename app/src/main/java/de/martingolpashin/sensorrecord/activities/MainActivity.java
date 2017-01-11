@@ -54,16 +54,39 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void writeCSVs(String fileName) {
+        File dir = FileHandler.getWritableStorageDir(this);
+        boolean saveDir = multipleSensorsRecording();
+        if(saveDir) {
+            dir = new File(dir + File.separator + fileName);
+            if(!dir.exists()) {
+                dir.mkdir();
+            }
+        }
+
         for(Sensor s : sensors) {
             if(s.isRecording()) {
-                File file = s.writeToCSV(fileName);
-                if(file != null) {
+                File file = s.writeToCSV(fileName, dir);
+                if(file != null && !saveDir) {
                     this.adapter.add(file);
                 }
-
                 s.setRecording(false);
             }
         }
+
+        if(saveDir) {
+            this.adapter.add(dir);
+        }
+    }
+
+    private boolean multipleSensorsRecording() {
+        int count = 0;
+        for(Sensor s : sensors) {
+            if(s.isRecording()) {
+                count ++;
+            }
+        }
+
+        return count > 1;
     }
 
     public void resetSensors() {

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.List;
@@ -65,9 +66,59 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final File file = files.get(position);
-
         holder.fileName.setText(file.getName());
+        if(file.isDirectory()) {
+            configureDirectory(holder, file, position);
+        } else {
+            configureFile(holder, file, position);
+        }
+    }
 
+    @Override
+    public int getItemCount() {
+        return files.size();
+    }
+
+    private void configureDirectory(final ViewHolder holder, final File dir, final int position) {
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(holder.layout.getContext(), "Open Dir", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(v.getContext())
+                        //TODO change alert icon
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Delete Folder")
+                        .setMessage("Are you sure you want to delete " + dir.getName() + " ?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //TODO delete directory
+                                for(File file : dir.listFiles()) {
+                                    if(!file.delete()) {
+                                        return;
+                                    }
+                                }
+                                if(dir.delete()) {
+                                    files.remove(position);
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, files.size());
+                                }
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+        });
+    }
+
+    private void configureFile(final ViewHolder holder, final File file, final int position) {
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,11 +132,11 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(v.getContext())
-                    //TODO change alert icon
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle("Delete File")
-                    .setMessage("Are you sure you want to delete " + file.getName() + " ?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        //TODO change alert icon
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Delete File")
+                        .setMessage("Are you sure you want to delete " + file.getName() + " ?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if(file.delete()) {
@@ -95,17 +146,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                                 }
                             }
 
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             }
         });
     }
-
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return files.size();
-    }
-
 }

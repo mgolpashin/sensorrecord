@@ -59,9 +59,8 @@ public class GPS extends BaseSensor implements Sensor, GoogleApiClient.Connectio
     }
 
     @Override
-    public File writeToCSV(String fileName) {
+    public File writeToCSV(String fileName, File dir) {
         this.timer.cancel();
-        File dir = FileHandler.getWritableStorageDir(context);
         File file = new File(dir, fileName + "_GPS.csv");
 
         try {

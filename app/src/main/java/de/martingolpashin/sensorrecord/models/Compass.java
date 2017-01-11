@@ -12,8 +12,6 @@ import java.io.FileWriter;
 import java.util.Date;
 import java.util.TimerTask;
 
-import de.martingolpashin.sensorrecord.utils.FileHandler;
-
 /**
  * Created by martin on 16.10.16.
  */
@@ -46,10 +44,8 @@ public class Compass extends BaseSensor implements Sensor, SensorEventListener {
     }
 
     @Override
-    public File writeToCSV(String fileName) {
+    public File writeToCSV(String fileName, File dir) {
         this.timer.cancel();
-        File dir = FileHandler.getWritableStorageDir(this.context);
-
         File file = new File(dir, fileName + "_Compass.csv");
 
         try {
