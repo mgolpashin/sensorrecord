@@ -11,12 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.List;
 
 import de.martingolpashin.sensorrecord.R;
+import de.martingolpashin.sensorrecord.models.FileStatus;
 
 /**
  * Created by martin on 13.11.16.
@@ -30,19 +30,21 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         public RelativeLayout layout;
         public TextView fileName;
         public ImageButton deleteButton;
+        public FileStatus status;
 
-        public ViewHolder(RelativeLayout layout, TextView fileName, ImageButton deleteButton) {
+        public ViewHolder(RelativeLayout layout, TextView fileName, ImageButton deleteButton, FileStatus status) {
             super(layout);
             this.layout = layout;
             this.fileName = fileName;
             this.deleteButton = deleteButton;
+            this.status = status;
         }
     }
 
     public void add(File file) {
         this.files.add(0, file);
-        //notifyDataSetChanged();
-        notifyItemInserted(0);
+        //notifyItemInserted(1);
+        notifyDataSetChanged();
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -58,7 +60,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                 .inflate(R.layout.single_file, parent, false);
         TextView fileName = (TextView) layout.findViewById(R.id.file_name);
         ImageButton deleteButton = (ImageButton) layout.findViewById(R.id.button_delete);
-        ViewHolder vh = new ViewHolder(layout, fileName, deleteButton);
+        ViewHolder vh = new ViewHolder(layout, fileName, deleteButton, null);
 
         return vh;
     }
@@ -80,10 +82,17 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     }
 
     private void configureDirectory(final ViewHolder holder, final File dir, final int position) {
+        holder.status = holder.status == FileStatus.DIR_OPENED ? FileStatus.DIR_OPENED : FileStatus.DIR_CLOSED;
+
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(holder.layout.getContext(), "Open Dir", Toast.LENGTH_LONG).show();
+                if(holder.status == FileStatus.DIR_CLOSED) {
+                    openDir(holder, dir, position);
+                } else if(holder.status == FileStatus.DIR_OPENED) {
+                    closeDir(holder, dir, position);
+                }
+
             }
         });
 
@@ -98,7 +107,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //TODO delete directory
+                                if(holder.status == FileStatus.DIR_OPENED) {
+                                    closeDir(holder, dir, position);
+                                }
+
                                 for(File file : dir.listFiles()) {
                                     if(!file.delete()) {
                                         return;
@@ -106,8 +118,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                                 }
                                 if(dir.delete()) {
                                     files.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, files.size());
+                                    //notifyItemRemoved(position);
+                                    notifyDataSetChanged();
+
                                 }
                             }
 
@@ -118,7 +131,29 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         });
     }
 
+    private void openDir(ViewHolder holder, File dir, int position) {
+        for(File f : dir.listFiles()) {
+            files.add(position + 1, f);
+            notifyItemInserted(position + 1);
+        }
+        holder.status = FileStatus.DIR_OPENED;
+    }
+
+    private void closeDir(ViewHolder holder, File dir, int position) {
+        for(File f : dir.listFiles()) {
+            int index = files.indexOf(f);
+            files.remove(index);
+            notifyItemRemoved(index);
+        }
+
+        holder.status = FileStatus.DIR_CLOSED;
+    }
+
     private void configureFile(final ViewHolder holder, final File file, final int position) {
+        if(holder.status == null) {
+            holder.status = FileStatus.FILE;
+        }
+
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,7 +177,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                                 if(file.delete()) {
                                     files.remove(position);
                                     notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, files.size());
                                 }
                             }
 
