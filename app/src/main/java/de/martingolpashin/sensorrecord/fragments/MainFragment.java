@@ -44,12 +44,12 @@ public class MainFragment extends Fragment {
     private Date _activeRecordStart;
 
     @ViewById
-    ImageButton btn_record;
+    public ImageButton btn_record;
     @ViewById
     ImageButton btn_stop;
 
     @ViewById
-    CheckBox check_gps;
+    public CheckBox check_gps;
     @ViewById
     EditText edit_gps;
 
@@ -109,7 +109,7 @@ public class MainFragment extends Fragment {
     }
 
     @Click
-    void btn_record() {
+    public void btn_record() {
         if(!this.isRecordingEnabled) {
             Toast.makeText(this.activity, "No active Sensor", Toast.LENGTH_LONG).show();
             return;
@@ -117,6 +117,11 @@ public class MainFragment extends Fragment {
 
         if(!hasMinInterval()) {
             Toast.makeText(this.activity, "Minimum interval is " + MIN_INTERVAL, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(ContextCompat.checkSelfPermission(this.activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this.activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, this.activity.PERMISSION_WRITE_EXTERNAL_STORAGE);
             return;
         }
 
@@ -167,7 +172,7 @@ public class MainFragment extends Fragment {
     }
 
     @Click
-    void check_gps(CheckBox check_gps) {
+    public void check_gps() {
         if(check_gps.isChecked() && ContextCompat.checkSelfPermission(this.activity,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             check_gps.setChecked(false);
@@ -205,7 +210,6 @@ public class MainFragment extends Fragment {
         _enableCheckboxes(enabled);
         _enableIntervalControls(enabled);
     }
-
 
     private void _enableCheckboxes(boolean enabled) {
         check_gps.setEnabled(enabled);
