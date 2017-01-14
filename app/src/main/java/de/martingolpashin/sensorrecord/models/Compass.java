@@ -44,9 +44,10 @@ public class Compass extends BaseSensor implements Sensor, SensorEventListener {
     }
 
     @Override
-    public File writeToCSV(String fileName, File dir) {
+    public File writeToCSV(String fileName, File dir, boolean includeDateTime) {
         this.timer.cancel();
-        File file = new File(dir, fileName + "_Compass.csv");
+        fileName = includeDateTime ? fileName + "_Compass.csv" : "Compass.csv";
+        File file = new File(dir, fileName);
 
         try {
             FileWriter fw = new FileWriter(file);
@@ -79,7 +80,6 @@ public class Compass extends BaseSensor implements Sensor, SensorEventListener {
         android.hardware.Sensor sensor = event.sensor;
 
         if (sensor.getType() == android.hardware.Sensor.TYPE_MAGNETIC_FIELD) {
-            //TODO Martin check values
             this.x = event.values[0];
             this.y = event.values[1];
             this.z = event.values[2];

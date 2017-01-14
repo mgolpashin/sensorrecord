@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
 
         for(Sensor s : sensors) {
             if(s.isRecording()) {
-                File file = s.writeToCSV(fileName, dir);
+                File file = s.writeToCSV(fileName, dir, !saveDir);
                 if(file != null && !saveDir) {
                     this.adapter.add(file);
                 }

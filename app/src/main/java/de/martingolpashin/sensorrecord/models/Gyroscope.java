@@ -36,7 +36,6 @@ public class Gyroscope extends BaseSensor implements Sensor, SensorEventListener
             @Override
             public void run() {
                 if (isRecording) {
-                    //TODO Martin check data
                     data.add(new GyroData(new Date().getTime() - startDate, x, y, z));
                 }
             }
@@ -44,9 +43,10 @@ public class Gyroscope extends BaseSensor implements Sensor, SensorEventListener
     }
 
     @Override
-    public File writeToCSV(String fileName, File dir) {
+    public File writeToCSV(String fileName, File dir, boolean includeDateTime) {
         this.timer.cancel();
-        File file = new File(dir, fileName + "_Gyroscope.csv");
+        fileName = includeDateTime ? fileName + "_Gyroscope.csv" : "Gyroscope.csv";
+        File file = new File(dir, fileName);
 
         try {
             FileWriter fw = new FileWriter(file);
@@ -79,7 +79,6 @@ public class Gyroscope extends BaseSensor implements Sensor, SensorEventListener
         android.hardware.Sensor sensor = event.sensor;
 
         if (sensor.getType() == android.hardware.Sensor.TYPE_GYROSCOPE) {
-            //TODO Martin check values
             this.x = event.values[0];
             this.y = event.values[1];
             this.z = event.values[2];

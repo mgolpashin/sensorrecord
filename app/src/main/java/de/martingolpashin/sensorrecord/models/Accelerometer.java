@@ -43,9 +43,10 @@ public class Accelerometer extends BaseSensor implements Sensor, SensorEventList
     }
 
     @Override
-    public File writeToCSV(String fileName, File dir) {
+    public File writeToCSV(String fileName, File dir, boolean includeDateTime) {
         this.timer.cancel();
-        File file = new File(dir, fileName + "_Accelerometer.csv");
+        fileName = includeDateTime ? fileName + "_Accelerometer.csv" : "Accelerometer.csv";
+        File file = new File(dir, fileName);
 
         try {
             FileWriter fw = new FileWriter(file);

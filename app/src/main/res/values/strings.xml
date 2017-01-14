@@ -2,4 +2,7 @@
     <string name="app_name">SensorRecord</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="icon">Icon</string>
+    <string name="file">file</string>
+    <string name="delete">delete</string>
 </resources>
