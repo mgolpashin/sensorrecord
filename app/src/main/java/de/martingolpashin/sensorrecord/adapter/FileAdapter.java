@@ -166,25 +166,22 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     private void configureFile(final ViewHolder holder, final File file, final int position) {
         String fileName = holder.fileName.getText().toString();
 
-        //TODO Change colors to fit material colors
         if(fileName.contains("Accelerometer")) {
             holder.status = FileStatus.FILE_ACCELEROMETER;
-            //TODO find icon
-            holder.icon.setImageResource(R.drawable.ic_stop_white_24dp);
-            holder.icon.setBackgroundColor(Color.GREEN);
+            holder.icon.setImageResource(R.drawable.accelerometer);
+            holder.icon.setBackgroundColor(Color.parseColor("#283593"));
         } else if(fileName.contains("Gyroscope")) {
             holder.status = FileStatus.FILE_GYROSCOPE;
-            //TODO find icon
-            holder.icon.setImageResource(R.drawable.ic_stop_white_24dp);
-            holder.icon.setBackgroundColor(Color.YELLOW);
+            holder.icon.setImageResource(R.drawable.gyroscope);
+            holder.icon.setBackgroundColor(Color.parseColor("#c62828"));
         } else if(fileName.contains("Compass")) {
             holder.status = FileStatus.FILE_COMPASS;
             holder.icon.setImageResource(R.drawable.ic_explore_white_24dp);
-            holder.icon.setBackgroundColor(Color.BLUE);
+            holder.icon.setBackgroundColor(Color.parseColor("#ff8f00"));
         } else if(fileName.contains("GPS")) {
             holder.status = FileStatus.FILE_GPS;
             holder.icon.setImageResource(R.drawable.ic_location_on_white_24dp);
-            holder.icon.setBackgroundColor(Color.RED);
+            holder.icon.setBackgroundColor(Color.parseColor("#00838f"));
         }
 
         if(holder.status == null) {
