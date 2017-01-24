@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.martingolpashin.sensorrecord.R;
@@ -25,6 +26,7 @@ import de.martingolpashin.sensorrecord.models.FileStatus;
  */
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     private List<File> files;
+    private ArrayList<File> openDirs = new ArrayList<>();
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout layout;
@@ -45,7 +47,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 
     public void add(File file) {
         this.files.add(0, file);
-        notifyDataSetChanged();
+        notifyItemInserted(0);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -81,8 +83,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         return files.size();
     }
 
+
     private void configureDirectory(final ViewHolder holder, final File dir, final int position) {
-        holder.status = holder.status == FileStatus.DIR_OPENED ? FileStatus.DIR_OPENED : FileStatus.DIR_CLOSED;
+        holder.status = this.openDirs.contains(dir) ?  FileStatus.DIR_OPENED : FileStatus.DIR_CLOSED;
         holder.icon.setBackgroundColor(holder.layout.getResources().getColor(R.color.material_grey_600));
 
         if(holder.status == FileStatus.DIR_OPENED) {
@@ -139,10 +142,12 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 
     private void openDir(ViewHolder holder, File dir, int position) {
         for(File f : dir.listFiles()) {
-            files.add(position + 1, f);
-            notifyItemInserted(position + 1);
+            int holderPosition = holder.getAdapterPosition();
+            files.add(holderPosition + 1, f);
+            notifyItemInserted(holderPosition + 1);
         }
         holder.status = FileStatus.DIR_OPENED;
+        this.openDirs.add(dir);
         holder.icon.setImageResource(R.drawable.ic_folder_open_white_24dp);
     }
 
@@ -154,6 +159,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         }
 
         holder.status = FileStatus.DIR_CLOSED;
+        this.openDirs.remove(dir);
         holder.icon.setImageResource(R.drawable.ic_folder_white_24dp);
     }
 
