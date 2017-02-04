@@ -106,6 +106,11 @@ public class MainFragment extends Fragment {
         check_gyro.setEnabled(true);
         this.activity.sensors.add(compass);
         check_compass.setEnabled(true);
+
+        edit_gps.setText("100");
+        edit_accelerometer.setText("10");
+        edit_gyro.setText("10");
+        edit_compass.setText("100");
     }
 
     @Click
