@@ -193,7 +193,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             public void onClick(View v) {
                 Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
                 openFileIntent.setData(Uri.fromFile(file));
-                v.getContext().startActivity(openFileIntent);
+                openFileIntent.setType("text/csv");
+                openFileIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                v.getContext().startActivity(Intent.createChooser(openFileIntent, "Open CSV"));
             }
         });
 
