@@ -1,4 +1,4 @@
-package de.martingolpashin.sensorrecord.utils;
+package de.martingolpashin.sensor_record.utils;
 
 import android.Manifest;
 import android.content.Context;

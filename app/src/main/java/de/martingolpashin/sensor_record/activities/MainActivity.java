@@ -1,4 +1,4 @@
-package de.martingolpashin.sensorrecord.activities;
+package de.martingolpashin.sensor_record.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,12 +15,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import de.martingolpashin.sensorrecord.R;
-import de.martingolpashin.sensorrecord.adapter.FileAdapter;
-import de.martingolpashin.sensorrecord.fragments.MainFragment;
-import de.martingolpashin.sensorrecord.fragments.MainFragment_;
-import de.martingolpashin.sensorrecord.models.Sensor;
-import de.martingolpashin.sensorrecord.utils.FileHandler;
+import de.martingolpashin.sensor_record.R;
+import de.martingolpashin.sensor_record.adapter.FileAdapter;
+import de.martingolpashin.sensor_record.fragments.MainFragment;
+import de.martingolpashin.sensor_record.fragments.MainFragment_;
+import de.martingolpashin.sensor_record.models.Sensor;
+import de.martingolpashin.sensor_record.utils.FileHandler;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity{

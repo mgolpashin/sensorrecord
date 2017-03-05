@@ -1,4 +1,4 @@
-package de.martingolpashin.sensorrecord;
+package de.martingolpashin.sensor_record;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

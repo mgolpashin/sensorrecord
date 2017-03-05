@@ -1,4 +1,4 @@
-package de.martingolpashin.sensorrecord.fragments;
+package de.martingolpashin.sensor_record.fragments;
 
 
 import android.Manifest;
@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import de.martingolpashin.sensorrecord.R;
-import de.martingolpashin.sensorrecord.activities.MainActivity;
-import de.martingolpashin.sensorrecord.models.Accelerometer;
-import de.martingolpashin.sensorrecord.models.Compass;
-import de.martingolpashin.sensorrecord.models.GPS;
-import de.martingolpashin.sensorrecord.models.Gyroscope;
+import de.martingolpashin.sensor_record.R;
+import de.martingolpashin.sensor_record.activities.MainActivity;
+import de.martingolpashin.sensor_record.models.Accelerometer;
+import de.martingolpashin.sensor_record.models.Compass;
+import de.martingolpashin.sensor_record.models.GPS;
+import de.martingolpashin.sensor_record.models.Gyroscope;
 
 @EFragment(R.layout.fragment_main)
 public class MainFragment extends Fragment {

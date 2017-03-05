@@ -1,15 +1,15 @@
-package de.martingolpashin.sensorrecord.models;
+package de.martingolpashin.sensor_record.models;
 
 /**
  * Created by martin on 14.10.16.
  */
-public class GyroData {
+public class CompassData {
     private long millis;
     private float x;
     private float y;
     private float z;
 
-    public GyroData(long milliseconds, float x, float y, float z) {
+    public CompassData(long milliseconds, float x, float y, float z) {
         this.millis = milliseconds;
         this.x = x;
         this.y = y;

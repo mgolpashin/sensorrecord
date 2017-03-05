@@ -1,12 +1,8 @@
-package de.martingolpashin.sensorrecord.models;
+package de.martingolpashin.sensor_record.models;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -18,13 +14,8 @@ import org.androidannotations.annotations.EBean;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
-import java.util.Timer;
 import java.util.TimerTask;
-
-import de.martingolpashin.sensorrecord.utils.FileHandler;
 
 /**
  * Created by martin on 16.10.16.

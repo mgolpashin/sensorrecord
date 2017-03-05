@@ -1,4 +1,4 @@
-package de.martingolpashin.sensorrecord.adapter;
+package de.martingolpashin.sensor_record.adapter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +18,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.martingolpashin.sensorrecord.R;
-import de.martingolpashin.sensorrecord.models.FileStatus;
+import de.martingolpashin.sensor_record.R;
+import de.martingolpashin.sensor_record.models.FileStatus;
 
 /**
  * Created by martin on 13.11.16.

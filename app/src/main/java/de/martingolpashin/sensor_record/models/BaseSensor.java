@@ -1,4 +1,4 @@
-package de.martingolpashin.sensorrecord.models;
+package de.martingolpashin.sensor_record.models;
 
 import android.content.Context;
 
