@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.martingolpashin.sensor_record" >
+    xmlns:tools="http://schemas.android.com/tools"
+    package="de.martingolpashin.sensor_record">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -10,6 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
         <activity
             android:name="de.martingolpashin.sensor_record.activities.MainActivity_"
             android:screenOrientation="portrait"
@@ -19,6 +21,20 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <data android:mimeType="text/comma-separated-values"/>
+                <data android:mimeType="text/csv"/>
+            </intent-filter>
         </activity>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="de.martingolpashin.sensor_record.files"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
     </application>
 </manifest>

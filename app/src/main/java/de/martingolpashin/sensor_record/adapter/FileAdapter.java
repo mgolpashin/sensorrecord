@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -98,7 +99,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 if(holder.status == FileStatus.DIR_CLOSED) {
-                    openDir(holder, dir, position);
+                    openDir(holder, dir);
                 } else if(holder.status == FileStatus.DIR_OPENED) {
                     closeDir(holder, dir);
                 }
@@ -140,7 +141,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         });
     }
 
-    private void openDir(ViewHolder holder, File dir, int position) {
+    private void openDir(ViewHolder holder, File dir) {
         for(File f : dir.listFiles()) {
             int holderPosition = holder.getAdapterPosition();
             files.add(holderPosition + 1, f);
@@ -192,10 +193,12 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
-                openFileIntent.setData(Uri.fromFile(file));
-                openFileIntent.setType("text/csv");
-                openFileIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                v.getContext().startActivity(Intent.createChooser(openFileIntent, "Open CSV"));
+                Uri fileUri = FileProvider.getUriForFile(v.getContext(), "de.martingolpashin.sensor_record.files", file);
+                String mime = v.getContext().getContentResolver().getType(fileUri);
+                openFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                openFileIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                openFileIntent.setDataAndType(fileUri, mime);
+                v.getContext().startActivity(openFileIntent);
             }
         });
 
