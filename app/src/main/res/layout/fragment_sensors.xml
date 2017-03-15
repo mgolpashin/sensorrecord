@@ -1,11 +1,20 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+</LinearLayout>
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivityFragment">
 
     <LinearLayout
+        android:id="@+id/layout_gps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -31,6 +40,8 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_accelerometer"
+        android:layout_below="@id/layout_gps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -56,6 +67,8 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_gyro"
+        android:layout_below="@id/layout_accelerometer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -81,6 +94,8 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_compass"
+        android:layout_below="@id/layout_gyro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -105,19 +120,14 @@
             android:indeterminate="false"/>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/file_list"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="bottom"
-        android:gravity="bottom">
+        android:gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <ImageButton
             android:id="@+id/btn_record"
@@ -145,4 +155,4 @@
             android:contentDescription="Stop" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

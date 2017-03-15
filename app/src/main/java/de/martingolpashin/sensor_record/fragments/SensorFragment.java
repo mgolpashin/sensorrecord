@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +34,8 @@ import de.martingolpashin.sensor_record.models.Compass;
 import de.martingolpashin.sensor_record.models.GPS;
 import de.martingolpashin.sensor_record.models.Gyroscope;
 
-@EFragment(R.layout.fragment_main)
-public class MainFragment extends Fragment {
+@EFragment(R.layout.fragment_sensors)
+public class SensorFragment extends Fragment {
     private boolean isRecordingEnabled = false;
     private static final int MIN_INTERVAL = 10;
     MainActivity activity;
@@ -68,9 +66,6 @@ public class MainFragment extends Fragment {
     @ViewById
     EditText edit_compass;
 
-    @ViewById
-    RecyclerView file_list;
-
     @Bean
     GPS gps;
     @Bean
@@ -80,20 +75,14 @@ public class MainFragment extends Fragment {
     @Bean
     Compass compass;
 
-    //use design library?
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.fragment_sensors, container, false);
     }
 
     @AfterViews
     void init() {
         this.activity = (MainActivity) getActivity();
-
-        file_list.setHasFixedSize(true);
-        file_list.setLayoutManager(new LinearLayoutManager(this.activity));
-        file_list.setAdapter(this.activity.getAdapter());
 
         //add sensors
         this.activity.sensors = new ArrayList<>();
@@ -173,7 +162,6 @@ public class MainFragment extends Fragment {
 
         btn_record.setVisibility(View.VISIBLE);
         btn_stop.setVisibility(View.GONE);
-        file_list.scrollToPosition(0);
     }
 
     @Click

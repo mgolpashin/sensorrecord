@@ -2,11 +2,13 @@ package de.martingolpashin.sensor_record.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ import java.util.List;
 
 import de.martingolpashin.sensor_record.R;
 import de.martingolpashin.sensor_record.adapter.FileAdapter;
-import de.martingolpashin.sensor_record.fragments.MainFragment;
-import de.martingolpashin.sensor_record.fragments.MainFragment_;
+import de.martingolpashin.sensor_record.adapter.PagerAdapter;
+import de.martingolpashin.sensor_record.fragments.SensorFragment;
 import de.martingolpashin.sensor_record.models.Sensor;
 import de.martingolpashin.sensor_record.utils.FileHandler;
 
@@ -27,10 +29,13 @@ public class MainActivity extends AppCompatActivity{
     public final int PERMISSION_ACCESS_FINE_LOCATION = 1;
     public final int PERMISSION_WRITE_EXTERNAL_STORAGE = 2;
 
+    @ViewById
+    ViewPager pager;
+
     private List<File> files;
     public ArrayList<Sensor> sensors;
 
-    MainFragment mainFragment;
+    SensorFragment sensorFragment;
 
     FileAdapter adapter;
 
@@ -47,10 +52,8 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         this.adapter = new FileAdapter(this.files);
-        this.mainFragment = new MainFragment_();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.layout_main, this.mainFragment)
-                .commit();
+
+        pager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
     }
 
     public void writeCSVs(String fileName) {
@@ -112,14 +115,14 @@ public class MainActivity extends AppCompatActivity{
         switch (requestCode) {
             case PERMISSION_ACCESS_FINE_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    this.mainFragment.check_gps.performClick();
+                    this.sensorFragment.check_gps.performClick();
                 } else {
                     Toast.makeText(this, "Please grant permission to use the gps sensor", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case PERMISSION_WRITE_EXTERNAL_STORAGE:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    this.mainFragment.btn_record.performClick();
+                    this.sensorFragment.btn_record.performClick();
                 } else {
                     Toast.makeText(this, "Please grant permission to write to external storage", Toast.LENGTH_LONG).show();
                 }
