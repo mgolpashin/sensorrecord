@@ -24,10 +24,7 @@ public class FileFragment extends Fragment {
     @ViewById
     RecyclerView file_list;
 
-
-    public FileFragment() {
-        // Required empty public constructor
-    }
+    public FileFragment() {}
 
     @AfterViews
     void init() {
@@ -41,7 +38,6 @@ public class FileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_files, container, false);
     }
 
