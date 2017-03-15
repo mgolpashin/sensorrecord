@@ -5,11 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.design.widget.TabLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        style="@style/AppTabLayout"
+        app:tabTextAppearance="@style/AppTabTextAppearance"
+        android:background="#f44336"
+        app:tabSelectedTextColor="#fff"
         android:id="@+id/tablayout">
 
         <android.support.design.widget.TabItem

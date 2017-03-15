@@ -4,6 +4,7 @@ package de.martingolpashin.sensor_record.fragments;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
@@ -40,11 +40,10 @@ public class SensorFragment extends Fragment {
     private static final int MIN_INTERVAL = 10;
     MainActivity activity;
     private Date _activeRecordStart;
+    private boolean isRecording = false;
 
     @ViewById
-    public ImageButton btn_record;
-    @ViewById
-    ImageButton btn_stop;
+    public FloatingActionButton btn_record_stop;
 
     @ViewById
     public CheckBox check_gps;
@@ -103,7 +102,15 @@ public class SensorFragment extends Fragment {
     }
 
     @Click
-    public void btn_record() {
+    void btn_record_stop() {
+        if(isRecording) {
+            onStopClicked();
+        } else {
+            onRecordClicked();
+        }
+    }
+
+    public void onRecordClicked() {
         if(!this.isRecordingEnabled) {
             Toast.makeText(this.activity, "No active Sensor", Toast.LENGTH_LONG).show();
             return;
@@ -135,10 +142,9 @@ public class SensorFragment extends Fragment {
         _activeRecordStart = new Date();
         _enableControls(false);
 
-        btn_record.setVisibility(View.GONE);
-        btn_stop.setVisibility(View.VISIBLE);
-
         activity.record();
+        isRecording = true;
+        btn_record_stop.setImageResource(R.drawable.ic_stop_white_24dp);
     }
 
     private boolean hasMinInterval() {
@@ -150,8 +156,7 @@ public class SensorFragment extends Fragment {
                 );
     }
 
-    @Click
-    void btn_stop() {
+    void onStopClicked() {
         String fileFormat = "yyyy-MM-dd_HH:mm:ss";
         SimpleDateFormat format = new SimpleDateFormat(fileFormat, Locale.GERMAN);
         String fileName = format.format(_activeRecordStart);
@@ -160,8 +165,8 @@ public class SensorFragment extends Fragment {
         activity.resetSensors();
         _resumeControls();
 
-        btn_record.setVisibility(View.VISIBLE);
-        btn_stop.setVisibility(View.GONE);
+        isRecording = false;
+        btn_record_stop.setImageResource(R.drawable.ic_fiber_manual_record_white_24dp);
     }
 
     @Click

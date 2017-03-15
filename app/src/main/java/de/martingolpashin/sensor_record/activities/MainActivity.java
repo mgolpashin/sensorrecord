@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity{
                 break;
             case PERMISSION_WRITE_EXTERNAL_STORAGE:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    this.sensorFragment.btn_record.performClick();
+                    this.sensorFragment.btn_record_stop.performClick();
                 } else {
                     Toast.makeText(this, "Please grant permission to write to external storage", Toast.LENGTH_LONG).show();
                 }
