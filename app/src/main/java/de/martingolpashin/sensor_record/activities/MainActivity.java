@@ -2,11 +2,13 @@ package de.martingolpashin.sensor_record.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
@@ -34,6 +36,9 @@ import de.martingolpashin.sensor_record.utils.FileHandler;
 public class MainActivity extends AppCompatActivity{
     public final int PERMISSION_ACCESS_FINE_LOCATION = 1;
     public final int PERMISSION_WRITE_EXTERNAL_STORAGE = 2;
+
+    @ViewById
+    RelativeLayout main_layout;
 
     @ViewById
     TabLayout tablayout;
@@ -110,14 +115,18 @@ public class MainActivity extends AppCompatActivity{
         for(Sensor s : sensors) {
             if(s.isRecording()) {
                 File file = s.writeToCSV(fileName, dir, !saveDir);
-                if(file != null && !saveDir) {
-                    this.adapter.add(file);
+                if(file != null) {
+                    if(!saveDir) {
+                        Snackbar.make(this.main_layout, file.getName() + " saved", Snackbar.LENGTH_LONG).show();
+                        this.adapter.add(file);
+                    }
                 }
                 s.setRecording(false);
             }
         }
 
         if(saveDir) {
+            Snackbar.make(this.main_layout, dir.getName() + " saved", Snackbar.LENGTH_LONG).show();
             this.adapter.add(dir);
         }
     }
