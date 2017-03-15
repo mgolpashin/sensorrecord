@@ -48,7 +48,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 
     public void add(File file) {
         this.files.add(0, file);
-        notifyItemInserted(0);
+        notifyDataSetChanged();
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -128,8 +128,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                                 }
                                 if(dir.delete()) {
                                     files.remove(position);
-                                    //notifyItemRemoved(position);
-                                    notifyDataSetChanged();
+                                    notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, getItemCount());
+                                    //notifyDataSetChanged();
 
                                 }
                             }
@@ -146,6 +147,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             int holderPosition = holder.getAdapterPosition();
             files.add(holderPosition + 1, f);
             notifyItemInserted(holderPosition + 1);
+            notifyItemRangeChanged(holderPosition + 1, getItemCount());
         }
         holder.status = FileStatus.DIR_OPENED;
         this.openDirs.add(dir);
@@ -157,6 +159,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             int index = files.indexOf(f);
             files.remove(index);
             notifyItemRemoved(index);
+            notifyItemRangeChanged(index, getItemCount());
         }
 
         holder.status = FileStatus.DIR_CLOSED;
@@ -215,6 +218,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                                 if(file.delete()) {
                                     files.remove(position);
                                     notifyItemRemoved(position);
+                                    notifyItemRangeChanged(position, getItemCount());
                                 }
                             }
 
