@@ -3,11 +3,6 @@
     android:layout_height="match_parent"
     tools:context="de.martingolpashin.sensor_record.fragments.FileFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FileFragment"/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/file_list"
         android:scrollbars="vertical"

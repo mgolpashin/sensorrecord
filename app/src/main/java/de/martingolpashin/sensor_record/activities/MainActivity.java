@@ -2,11 +2,14 @@ package de.martingolpashin.sensor_record.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.TabItem;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -20,7 +23,10 @@ import java.util.List;
 import de.martingolpashin.sensor_record.R;
 import de.martingolpashin.sensor_record.adapter.FileAdapter;
 import de.martingolpashin.sensor_record.adapter.PagerAdapter;
+import de.martingolpashin.sensor_record.fragments.FileFragment;
+import de.martingolpashin.sensor_record.fragments.FileFragment_;
 import de.martingolpashin.sensor_record.fragments.SensorFragment;
+import de.martingolpashin.sensor_record.fragments.SensorFragment_;
 import de.martingolpashin.sensor_record.models.Sensor;
 import de.martingolpashin.sensor_record.utils.FileHandler;
 
@@ -30,12 +36,23 @@ public class MainActivity extends AppCompatActivity{
     public final int PERMISSION_WRITE_EXTERNAL_STORAGE = 2;
 
     @ViewById
+    TabLayout tablayout;
+
+    @ViewById
+    TabItem sensortab;
+
+    @ViewById
+    TabItem filestab;
+
+    @ViewById
     ViewPager pager;
 
     private List<File> files;
+
     public ArrayList<Sensor> sensors;
 
     SensorFragment sensorFragment;
+    FileFragment fileFragment;
 
     FileAdapter adapter;
 
@@ -43,6 +60,9 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.sensorFragment = new SensorFragment_();
+        this.fileFragment = new FileFragment_();
 
         this.files = new ArrayList<>(Arrays.asList(FileHandler.getWritableStorageDir(this).listFiles()));
         Collections.sort(this.files, new Comparator<File>() {
@@ -52,8 +72,29 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         this.adapter = new FileAdapter(this.files);
+    }
 
-        pager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
+    @AfterViews
+    void init() {
+        pager.setAdapter(new PagerAdapter(getSupportFragmentManager(), sensorFragment, fileFragment));
+        pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablayout));
+        tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                pager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
     }
 
     public void writeCSVs(String fileName) {
