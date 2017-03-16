@@ -86,7 +86,7 @@ public class GPS extends BaseSensor implements Sensor, GoogleApiClient.Connectio
             googleApiClient.disconnect();
         }
     }
-
+    
     @Override
     public void onConnected(Bundle bundle) {
         LocationRequest locationRequest = new LocationRequest();

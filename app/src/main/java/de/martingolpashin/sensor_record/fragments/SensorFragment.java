@@ -30,6 +30,7 @@ import java.util.Locale;
 import de.martingolpashin.sensor_record.R;
 import de.martingolpashin.sensor_record.activities.MainActivity;
 import de.martingolpashin.sensor_record.models.Accelerometer;
+import de.martingolpashin.sensor_record.models.AirPressure;
 import de.martingolpashin.sensor_record.models.Compass;
 import de.martingolpashin.sensor_record.models.GPS;
 import de.martingolpashin.sensor_record.models.Gyroscope;
@@ -65,6 +66,11 @@ public class SensorFragment extends Fragment {
     @ViewById
     EditText edit_compass;
 
+    @ViewById
+    CheckBox check_pressure;
+    @ViewById
+    EditText edit_pressure;
+
     @Bean
     GPS gps;
     @Bean
@@ -73,6 +79,8 @@ public class SensorFragment extends Fragment {
     Gyroscope gyro;
     @Bean
     Compass compass;
+    @Bean
+    AirPressure pressure;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,11 +102,14 @@ public class SensorFragment extends Fragment {
         check_gyro.setEnabled(true);
         this.activity.sensors.add(compass);
         check_compass.setEnabled(true);
+        this.activity.sensors.add(pressure);
+        check_pressure.setEnabled(true);
 
         edit_gps.setText("100");
         edit_accelerometer.setText("10");
         edit_gyro.setText("10");
         edit_compass.setText("100");
+        edit_pressure.setText("100");
     }
 
     @Click
@@ -138,6 +149,9 @@ public class SensorFragment extends Fragment {
         if(edit_compass.isEnabled() && !edit_compass.getText().toString().equals("")) {
             compass.setInterval(Integer.parseInt(edit_compass.getText().toString()));
         }
+        if(edit_pressure.isEnabled() && !edit_pressure.getText().toString().equals("")) {
+            pressure.setInterval(Integer.parseInt(edit_pressure.getText().toString()));
+        }
 
         _activeRecordStart = new Date();
         _enableControls(false);
@@ -152,7 +166,8 @@ public class SensorFragment extends Fragment {
                     (edit_gps.isEnabled() && (edit_gps.getText().toString().equals("") || (Integer.parseInt(edit_gps.getText().toString())) < MIN_INTERVAL)) ||
                     (edit_accelerometer.isEnabled() && (edit_accelerometer.getText().toString().equals("") || (Integer.parseInt(edit_accelerometer.getText().toString())) < MIN_INTERVAL)) ||
                     (edit_gyro.isEnabled() && (edit_gyro.getText().toString().equals("") || (Integer.parseInt(edit_gyro.getText().toString())) < MIN_INTERVAL)) ||
-                    (edit_compass.isEnabled() && (edit_compass.getText().toString().equals("") || (Integer.parseInt(edit_compass.getText().toString())) < MIN_INTERVAL))
+                    (edit_compass.isEnabled() && (edit_compass.getText().toString().equals("") || (Integer.parseInt(edit_compass.getText().toString())) < MIN_INTERVAL)) ||
+                    (edit_pressure.isEnabled() && (edit_pressure.getText().toString().equals("") || (Integer.parseInt(edit_pressure.getText().toString())) < MIN_INTERVAL))
                 );
     }
 
@@ -204,6 +219,13 @@ public class SensorFragment extends Fragment {
         checkRecordBtnEnabled();
     }
 
+    @CheckedChange
+    void check_pressure(boolean isChecked) {
+        edit_pressure.setEnabled(isChecked);
+        pressure.setActive(isChecked);
+        checkRecordBtnEnabled();
+    }
+
     private void _enableControls(boolean enabled) {
         _enableCheckboxes(enabled);
         _enableIntervalControls(enabled);
@@ -214,6 +236,7 @@ public class SensorFragment extends Fragment {
         check_accelerometer.setEnabled(enabled);
         check_gyro.setEnabled(enabled);
         check_compass.setEnabled(enabled);
+        check_pressure.setEnabled(enabled);
     }
 
     private void _enableIntervalControls(boolean enabled) {
@@ -229,13 +252,17 @@ public class SensorFragment extends Fragment {
         if(check_compass.isChecked()) {
             edit_compass.setEnabled(enabled);
         }
+        if(check_pressure.isChecked()) {
+            edit_pressure.setEnabled(enabled);
+        }
     }
 
     private void checkRecordBtnEnabled() {
         if (!check_compass.isChecked() &&
             !check_accelerometer.isChecked() &&
             !check_gps.isChecked() &&
-            !check_gyro.isChecked()) {
+            !check_gyro.isChecked() &&
+            !check_pressure.isChecked()) {
 
             this.isRecordingEnabled = false;
         } else {

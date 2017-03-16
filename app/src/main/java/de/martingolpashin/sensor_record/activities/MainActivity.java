@@ -3,7 +3,6 @@ package de.martingolpashin.sensor_record.activities;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -42,12 +41,6 @@ public class MainActivity extends AppCompatActivity{
 
     @ViewById
     TabLayout tablayout;
-
-    @ViewById
-    TabItem sensortab;
-
-    @ViewById
-    TabItem filestab;
 
     @ViewById
     ViewPager pager;

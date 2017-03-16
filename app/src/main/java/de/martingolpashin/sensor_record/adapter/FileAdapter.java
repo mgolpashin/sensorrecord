@@ -186,6 +186,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             holder.status = FileStatus.FILE_GPS;
             holder.icon.setImageResource(R.drawable.ic_location_on_white_24dp);
             holder.icon.setBackgroundColor(Color.parseColor("#00838f"));
+        } else if(fileName.contains("Pressure")) {
+            holder.status = FileStatus.FILE_PRESSURE;
+            holder.icon.setImageResource(R.drawable.ic_pressure_white);
+            holder.icon.setBackgroundColor(Color.parseColor("#fe3264"));
         }
 
         if(holder.status == null) {
