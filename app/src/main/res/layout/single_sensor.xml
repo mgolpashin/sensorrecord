@@ -1,0 +1,24 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_sensor"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <CheckBox
+        android:id="@+id/check_sensor"
+        android:padding="8dp"
+        android:layout_width="160dp"
+        android:layout_height="64dp"
+        android:text="@string/sensor_accelerometer"
+        android:checked="false" />
+
+    <EditText
+        android:id="@+id/edit_sensor"
+        android:hint="@string/interval"
+        android:padding="8dp"
+        android:enabled="false"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

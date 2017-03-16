@@ -1,9 +1,8 @@
-package de.martingolpashin.sensor_record.models;
+package de.martingolpashin.sensor_record.models.sensors.gps;
 
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -12,21 +11,21 @@ import com.google.android.gms.location.LocationServices;
 
 import org.androidannotations.annotations.EBean;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.Date;
 import java.util.TimerTask;
+
+import de.martingolpashin.sensor_record.models.Sensor;
 
 /**
  * Created by martin on 16.10.16.
  */
 @EBean
-public class GPS extends BaseSensor implements Sensor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+public class GPS extends Sensor implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     private Location lastKnownLocation;
     GoogleApiClient googleApiClient;
 
     public GPS(Context context) {
-        super(context);
+        super(context, "GPS", 100, new String[]{"Milliseconds", "Latitude", "Longitude", "Altitude"});
 
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(context)
@@ -50,43 +49,15 @@ public class GPS extends BaseSensor implements Sensor, GoogleApiClient.Connectio
     }
 
     @Override
-    public File writeToCSV(String fileName, File dir, boolean includeDateTime) {
-        this.timer.cancel();
-        fileName = includeDateTime ? fileName + "_GPS.csv" : "GPS.csv";
-        File file = new File(dir, fileName);
-
-        try {
-            FileWriter fw = new FileWriter(file);
-            fw.write("Milliseconds;Latitude;Longitude;Altitude" + System.getProperty("line.separator"));
-            for(Object obj : data) {
-                GPSData entry = (GPSData) obj;
-                fw.write(entry.getMillis() + ";" +
-                        entry.getLocation().getLatitude() + ";" +
-                        entry.getLocation().getLongitude() + ";" +
-                        entry.getLocation().getAltitude() + ";" + //TODO Altitude is 0
-                        System.getProperty("line.separator"));
-            }
-
-            fw.flush();
-            fw.close();
-            return file;
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this.context, "Fehler beim Speichern der Datei", Toast.LENGTH_LONG).show();
-            return null;
-        }
-    }
-
-    @Override
     public void setActive(boolean isActiveNew) {
-        isActive = isActiveNew;
-        if (isActive) {
+        active = isActiveNew;
+        if (active) {
             googleApiClient.connect();
         } else {
             googleApiClient.disconnect();
         }
     }
-    
+
     @Override
     public void onConnected(Bundle bundle) {
         LocationRequest locationRequest = new LocationRequest();

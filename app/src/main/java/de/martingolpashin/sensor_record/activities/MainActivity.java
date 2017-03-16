@@ -29,6 +29,7 @@ import de.martingolpashin.sensor_record.fragments.FileFragment_;
 import de.martingolpashin.sensor_record.fragments.SensorFragment;
 import de.martingolpashin.sensor_record.fragments.SensorFragment_;
 import de.martingolpashin.sensor_record.models.Sensor;
+import de.martingolpashin.sensor_record.models.SensorHandler;
 import de.martingolpashin.sensor_record.utils.FileHandler;
 
 @EActivity(R.layout.activity_main)
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
 
     private List<File> files;
 
-    public ArrayList<Sensor> sensors;
+    SensorHandler sensorHandler;
 
     SensorFragment sensorFragment;
     FileFragment fileFragment;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.sensorHandler = new SensorHandler(this);
         this.sensorFragment = new SensorFragment_();
         this.fileFragment = new FileFragment_();
 
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity{
             }
         }
 
-        for(Sensor s : sensors) {
+        for(Sensor s : sensorHandler.getSensors()) {
             if(s.isRecording()) {
                 File file = s.writeToCSV(fileName, dir, !saveDir);
                 if(file != null) {
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity{
 
     private boolean multipleSensorsRecording() {
         int count = 0;
-        for(Sensor s : sensors) {
+        for(Sensor s : sensorHandler.getSensors()) {
             if(s.isRecording()) {
                 count ++;
             }
@@ -136,13 +138,13 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void resetSensors() {
-        for(Sensor s : this.sensors) {
+        for(Sensor s : sensorHandler.getSensors()) {
             s.reset();
         }
     }
 
     public void record() {
-        for(Sensor s : sensors) {
+        for(Sensor s : sensorHandler.getSensors()) {
             if(s.isActive()) {
                 s.record();
             }
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity{
         switch (requestCode) {
             case PERMISSION_ACCESS_FINE_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    this.sensorFragment.check_gps.performClick();
+                    // TODO FIX this.sensorFragment.check_gps.performClick();
                 } else {
                     Toast.makeText(this, "Please grant permission to use the gps sensor", Toast.LENGTH_SHORT).show();
                 }
@@ -170,5 +172,9 @@ public class MainActivity extends AppCompatActivity{
                     Toast.makeText(this, "Please grant permission to write to external storage", Toast.LENGTH_LONG).show();
                 }
         }
+    }
+
+    public SensorHandler getSensorHandler() {
+        return sensorHandler;
     }
 }

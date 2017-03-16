@@ -1,4 +1,4 @@
-package de.martingolpashin.sensor_record.models;
+package de.martingolpashin.sensor_record.models.sensors.compass;
 
 import android.content.Context;
 import android.hardware.SensorEvent;
@@ -7,16 +7,16 @@ import android.hardware.SensorManager;
 
 import org.androidannotations.annotations.EBean;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.Date;
 import java.util.TimerTask;
+
+import de.martingolpashin.sensor_record.models.Sensor;
 
 /**
  * Created by martin on 16.10.16.
  */
 @EBean
-public class Compass extends BaseSensor implements Sensor, SensorEventListener {
+public class Compass extends Sensor implements SensorEventListener {
     private float x;
     private float y;
     private float z;
@@ -25,7 +25,7 @@ public class Compass extends BaseSensor implements Sensor, SensorEventListener {
     android.hardware.Sensor compass;
 
     public Compass(Context context) {
-        super(context);
+        super(context, "Compass", 100, new String[]{"Milliseconds", "X", "Y", "Z"});
         this.isRecording = false;
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.compass = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_MAGNETIC_FIELD);
@@ -43,31 +43,8 @@ public class Compass extends BaseSensor implements Sensor, SensorEventListener {
         }, 0, interval);
     }
 
-    @Override
-    public File writeToCSV(String fileName, File dir, boolean includeDateTime) {
-        this.timer.cancel();
-        fileName = includeDateTime ? fileName + "_Compass.csv" : "Compass.csv";
-        File file = new File(dir, fileName);
-
-        try {
-            FileWriter fw = new FileWriter(file);
-            fw.write("Milliseconds;X;Y;Z;" + System.getProperty("line.separator"));
-            for(Object obj : data) {
-                CompassData entry = (CompassData) obj;
-                fw.write(entry.toString());
-            }
-
-            fw.flush();
-            fw.close();
-            return file;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public void setActive(boolean isActive) {
-        this.isActive = isActive;
+        this.active = isActive;
         if(isActive) {
             this.sensorManager.registerListener(this, this.compass, SensorManager.SENSOR_DELAY_FASTEST);
         } else {

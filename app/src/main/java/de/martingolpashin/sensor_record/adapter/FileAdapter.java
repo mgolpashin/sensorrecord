@@ -130,8 +130,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                                     files.remove(position);
                                     notifyItemRemoved(position);
                                     notifyItemRangeChanged(position, getItemCount());
-                                    //notifyDataSetChanged();
-
                                 }
                             }
 

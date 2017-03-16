@@ -11,76 +11,35 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.CheckedChange;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
 import de.martingolpashin.sensor_record.R;
 import de.martingolpashin.sensor_record.activities.MainActivity;
-import de.martingolpashin.sensor_record.models.Accelerometer;
-import de.martingolpashin.sensor_record.models.AirPressure;
-import de.martingolpashin.sensor_record.models.Compass;
-import de.martingolpashin.sensor_record.models.GPS;
-import de.martingolpashin.sensor_record.models.Gyroscope;
+import de.martingolpashin.sensor_record.models.Sensor;
 
 @EFragment(R.layout.fragment_sensors)
 public class SensorFragment extends Fragment {
-    private boolean isRecordingEnabled = false;
     private static final int MIN_INTERVAL = 10;
     MainActivity activity;
     private Date _activeRecordStart;
     private boolean isRecording = false;
 
     @ViewById
+    LinearLayout layout_sensors;
+
+    @ViewById
     public FloatingActionButton btn_record_stop;
-
-    @ViewById
-    public CheckBox check_gps;
-    @ViewById
-    EditText edit_gps;
-
-    @ViewById
-    CheckBox check_accelerometer;
-    @ViewById
-    EditText edit_accelerometer;
-
-    @ViewById
-    CheckBox check_gyro;
-    @ViewById
-    EditText edit_gyro;
-
-    @ViewById
-    CheckBox check_compass;
-    @ViewById
-    EditText edit_compass;
-
-    @ViewById
-    CheckBox check_pressure;
-    @ViewById
-    EditText edit_pressure;
-
-    @Bean
-    GPS gps;
-    @Bean
-    Accelerometer accelerometer;
-    @Bean
-    Gyroscope gyro;
-    @Bean
-    Compass compass;
-    @Bean
-    AirPressure pressure;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,26 +49,9 @@ public class SensorFragment extends Fragment {
     @AfterViews
     void init() {
         this.activity = (MainActivity) getActivity();
-
-        //add sensors
-        this.activity.sensors = new ArrayList<>();
-
-        this.activity.sensors.add(gps);
-        check_gps.setEnabled(true);
-        this.activity.sensors.add(accelerometer);
-        check_accelerometer.setEnabled(true);
-        this.activity.sensors.add(gyro);
-        check_gyro.setEnabled(true);
-        this.activity.sensors.add(compass);
-        check_compass.setEnabled(true);
-        this.activity.sensors.add(pressure);
-        check_pressure.setEnabled(true);
-
-        edit_gps.setText("100");
-        edit_accelerometer.setText("10");
-        edit_gyro.setText("10");
-        edit_compass.setText("100");
-        edit_pressure.setText("100");
+        for(Sensor s : activity.getSensorHandler().getSensors()) {
+            layout_sensors.addView(s.getView());
+        }
     }
 
     @Click
@@ -122,7 +64,7 @@ public class SensorFragment extends Fragment {
     }
 
     public void onRecordClicked() {
-        if(!this.isRecordingEnabled) {
+        if(!activity.getSensorHandler().hasActiveSensor()) {
             Toast.makeText(this.activity, "No active Sensor", Toast.LENGTH_LONG).show();
             return;
         }
@@ -137,20 +79,10 @@ public class SensorFragment extends Fragment {
             return;
         }
 
-        if(edit_gps.isEnabled() && !edit_gps.getText().toString().equals("")) {
-            gps.setInterval(Integer.parseInt(edit_gps.getText().toString()));
-        }
-        if(edit_accelerometer.isEnabled() && !edit_accelerometer.getText().toString().equals("")) {
-            accelerometer.setInterval(Integer.parseInt(edit_accelerometer.getText().toString()));
-        }
-        if(edit_gyro.isEnabled() && !edit_gyro.getText().toString().equals("")) {
-            gyro.setInterval(Integer.parseInt(edit_gyro.getText().toString()));
-        }
-        if(edit_compass.isEnabled() && !edit_compass.getText().toString().equals("")) {
-            compass.setInterval(Integer.parseInt(edit_compass.getText().toString()));
-        }
-        if(edit_pressure.isEnabled() && !edit_pressure.getText().toString().equals("")) {
-            pressure.setInterval(Integer.parseInt(edit_pressure.getText().toString()));
+        for(Sensor s : activity.getSensorHandler().getSensors()) {
+            if(s.getEditText().isEnabled() && !s.getEditText().getText().toString().equals("")) {
+                s.setInterval(Integer.parseInt(s.getEditText().getText().toString()));
+            }
         }
 
         _activeRecordStart = new Date();
@@ -162,13 +94,12 @@ public class SensorFragment extends Fragment {
     }
 
     private boolean hasMinInterval() {
-        return !(
-                    (edit_gps.isEnabled() && (edit_gps.getText().toString().equals("") || (Integer.parseInt(edit_gps.getText().toString())) < MIN_INTERVAL)) ||
-                    (edit_accelerometer.isEnabled() && (edit_accelerometer.getText().toString().equals("") || (Integer.parseInt(edit_accelerometer.getText().toString())) < MIN_INTERVAL)) ||
-                    (edit_gyro.isEnabled() && (edit_gyro.getText().toString().equals("") || (Integer.parseInt(edit_gyro.getText().toString())) < MIN_INTERVAL)) ||
-                    (edit_compass.isEnabled() && (edit_compass.getText().toString().equals("") || (Integer.parseInt(edit_compass.getText().toString())) < MIN_INTERVAL)) ||
-                    (edit_pressure.isEnabled() && (edit_pressure.getText().toString().equals("") || (Integer.parseInt(edit_pressure.getText().toString())) < MIN_INTERVAL))
-                );
+        boolean hasMinInterval = true;
+        for(Sensor s : activity.getSensorHandler().getSensors()) {
+            EditText editText = s.getEditText();
+            hasMinInterval = hasMinInterval && !(editText.isEnabled() && editText.getText().toString().equals("") || (Integer.parseInt(editText.getText().toString()) < MIN_INTERVAL));
+        }
+        return hasMinInterval;
     }
 
     void onStopClicked() {
@@ -184,47 +115,19 @@ public class SensorFragment extends Fragment {
         btn_record_stop.setImageResource(R.drawable.ic_fiber_manual_record_white_24dp);
     }
 
-    @Click
-    public void check_gps() {
-        if(check_gps.isChecked() && ContextCompat.checkSelfPermission(this.activity,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            check_gps.setChecked(false);
-            ActivityCompat.requestPermissions(this.activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, this.activity.PERMISSION_ACCESS_FINE_LOCATION);
-            return;
-        }
-
-        edit_gps.setEnabled(check_gps.isChecked());
-        gps.setActive(check_gps.isChecked());
-        checkRecordBtnEnabled();
-    }
-
-    @CheckedChange
-    void check_accelerometer(boolean isChecked) {
-        edit_accelerometer.setEnabled(isChecked);
-        accelerometer.setActive(isChecked);
-        checkRecordBtnEnabled();
-    }
-
-    @CheckedChange
-    void check_gyro(boolean isChecked) {
-        edit_gyro.setEnabled(isChecked);
-        gyro.setActive(isChecked);
-        checkRecordBtnEnabled();
-    }
-
-    @CheckedChange
-    void check_compass(boolean isChecked) {
-        edit_compass.setEnabled(isChecked);
-        compass.setActive(isChecked);
-        checkRecordBtnEnabled();
-    }
-
-    @CheckedChange
-    void check_pressure(boolean isChecked) {
-        edit_pressure.setEnabled(isChecked);
-        pressure.setActive(isChecked);
-        checkRecordBtnEnabled();
-    }
+//    @Click
+//    public void check_gps() {
+//        if(check_gps.isChecked() && ContextCompat.checkSelfPermission(this.activity,
+//                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+//            check_gps.setChecked(false);
+//            ActivityCompat.requestPermissions(this.activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, this.activity.PERMISSION_ACCESS_FINE_LOCATION);
+//            return;
+//        }
+//
+//        edit_gps.setEnabled(check_gps.isChecked());
+//        gps.setActive(check_gps.isChecked());
+//        checkRecordBtnEnabled();
+//    }
 
     private void _enableControls(boolean enabled) {
         _enableCheckboxes(enabled);
@@ -232,41 +135,16 @@ public class SensorFragment extends Fragment {
     }
 
     private void _enableCheckboxes(boolean enabled) {
-        check_gps.setEnabled(enabled);
-        check_accelerometer.setEnabled(enabled);
-        check_gyro.setEnabled(enabled);
-        check_compass.setEnabled(enabled);
-        check_pressure.setEnabled(enabled);
+        for(Sensor s : activity.getSensorHandler().getSensors()) {
+            s.getCheckBox().setEnabled(enabled);
+        }
     }
 
     private void _enableIntervalControls(boolean enabled) {
-        if (check_gps.isChecked()) {
-            edit_gps.setEnabled(enabled);
-        }
-        if (check_accelerometer.isChecked()) {
-            edit_accelerometer.setEnabled(enabled);
-        }
-        if(check_gyro.isChecked()) {
-            edit_gyro.setEnabled(enabled);
-        }
-        if(check_compass.isChecked()) {
-            edit_compass.setEnabled(enabled);
-        }
-        if(check_pressure.isChecked()) {
-            edit_pressure.setEnabled(enabled);
-        }
-    }
-
-    private void checkRecordBtnEnabled() {
-        if (!check_compass.isChecked() &&
-            !check_accelerometer.isChecked() &&
-            !check_gps.isChecked() &&
-            !check_gyro.isChecked() &&
-            !check_pressure.isChecked()) {
-
-            this.isRecordingEnabled = false;
-        } else {
-            this.isRecordingEnabled = true;
+        for(Sensor s : activity.getSensorHandler().getSensors()) {
+            if(s.getCheckBox().isChecked()) {
+                s.getEditText().setEnabled(enabled);
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package de.martingolpashin.sensor_record.models;
+package de.martingolpashin.sensor_record.models.sensors.gps;
 
 import android.location.Location;
 
