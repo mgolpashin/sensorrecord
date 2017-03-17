@@ -89,9 +89,7 @@ public class Sensor {
             fw.write(head + System.getProperty("line.separator"));
 
             for(Object obj: data) {
-                //TODO use corresponding data
-                LightData entry = (LightData) obj;
-                fw.write(entry.toString());
+                fw.write(obj.toString());
             }
 
             fw.flush();
