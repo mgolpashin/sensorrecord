@@ -32,14 +32,16 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public RelativeLayout layout;
         public ImageView icon;
+        public TextView iconText;
         public TextView fileName;
         public ImageButton deleteButton;
         public FileStatus status;
 
-        public ViewHolder(RelativeLayout layout, ImageView icon, TextView fileName, ImageButton deleteButton, FileStatus status) {
+        public ViewHolder(RelativeLayout layout, ImageView icon, TextView iconText, TextView fileName, ImageButton deleteButton, FileStatus status) {
             super(layout);
             this.layout = layout;
             this.icon = icon;
+            this.iconText = iconText;
             this.fileName = fileName;
             this.deleteButton = deleteButton;
             this.status = status;
@@ -61,9 +63,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.single_file, parent, false);
         ImageView icon = (ImageView) layout.findViewById(R.id.icon);
+        TextView iconText = (TextView) layout.findViewById(R.id.icon_text);
         TextView fileName = (TextView) layout.findViewById(R.id.file_name);
         ImageButton deleteButton = (ImageButton) layout.findViewById(R.id.button_delete);
-        return new ViewHolder(layout, icon, fileName, deleteButton, null);
+        return new ViewHolder(layout, icon, iconText, fileName, deleteButton, null);
     }
 
     @Override
@@ -85,6 +88,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 
     private void configureDirectory(final ViewHolder holder, final File dir, final int position) {
         holder.status = this.openDirs.contains(dir) ?  FileStatus.DIR_OPENED : FileStatus.DIR_CLOSED;
+
+        holder.iconText.setVisibility(View.GONE);
+        holder.icon.setVisibility(View.VISIBLE);
+
         holder.icon.setBackgroundColor(holder.layout.getResources().getColor(R.color.material_grey_600));
 
         if(holder.status == FileStatus.DIR_OPENED) {
@@ -165,27 +172,44 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 
     private void configureFile(final ViewHolder holder, final File file, final int position) {
         String fileName = holder.fileName.getText().toString();
+        holder.status = FileStatus.FILE;
+
+        holder.iconText.setVisibility(View.VISIBLE);
+        holder.icon.setVisibility(View.GONE);
 
         if(fileName.contains("Accelerometer")) {
-            holder.status = FileStatus.FILE_ACCELEROMETER;
-            holder.icon.setImageResource(R.drawable.accelerometer);
-            holder.icon.setBackgroundColor(Color.parseColor("#283593"));
-        } else if(fileName.contains("Gyroscope")) {
-            holder.status = FileStatus.FILE_GYROSCOPE;
-            holder.icon.setImageResource(R.drawable.gyroscope);
-            holder.icon.setBackgroundColor(Color.parseColor("#c62828"));
+            holder.iconText.setText("A");
+            holder.iconText.setBackgroundColor(Color.parseColor("#283593"));
+        } else if(fileName.contains("AmbientTemperature")) {
+            holder.iconText.setText("AT");
+            holder.iconText.setBackgroundColor(Color.parseColor("#fe3264"));
         } else if(fileName.contains("Compass")) {
-            holder.status = FileStatus.FILE_COMPASS;
-            holder.icon.setImageResource(R.drawable.ic_explore_white_24dp);
-            holder.icon.setBackgroundColor(Color.parseColor("#ff8f00"));
+            holder.iconText.setText("C");
+            holder.iconText.setBackgroundColor(Color.parseColor("#ff8f00"));
         } else if(fileName.contains("GPS")) {
-            holder.status = FileStatus.FILE_GPS;
-            holder.icon.setImageResource(R.drawable.ic_location_on_white_24dp);
-            holder.icon.setBackgroundColor(Color.parseColor("#00838f"));
+            holder.iconText.setText("GPS");
+            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
+        } else if(fileName.contains("Gravity")) {
+            holder.iconText.setText("Gr");
+            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
+        } else if(fileName.contains("Gyroscope")) {
+            holder.iconText.setText("Gy");
+            holder.iconText.setBackgroundColor(Color.parseColor("#c62828"));
+        } else if(fileName.contains("Light")) {
+            holder.iconText.setText("L");
+            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
+        } else if(fileName.contains("LinearAccelerometer")) {
+            holder.iconText.setText("LA");
+            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
         } else if(fileName.contains("Pressure")) {
-            holder.status = FileStatus.FILE_PRESSURE;
-            holder.icon.setImageResource(R.drawable.ic_pressure_white);
-            holder.icon.setBackgroundColor(Color.parseColor("#fe3264"));
+            holder.iconText.setText("Pre");
+            holder.iconText.setBackgroundColor(Color.parseColor("#fe3264"));
+        } else if(fileName.contains("Proximity")) {
+            holder.iconText.setText("Pro");
+            holder.iconText.setBackgroundColor(Color.parseColor("#fe3264"));
+        } else if(fileName.contains("RotationVector")) {
+            holder.iconText.setText("RV");
+            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
         }
 
         if(holder.status == null) {
