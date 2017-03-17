@@ -1,4 +1,4 @@
-package de.martingolpashin.sensor_record.models.sensors.airpressure;
+package de.martingolpashin.sensor_record.models.sensors.pressure;
 
 import android.content.Context;
 import android.hardware.SensorEvent;
@@ -16,13 +16,13 @@ import de.martingolpashin.sensor_record.models.Sensor;
  * Created by martin on 16.10.16.
  */
 @EBean
-public class AirPressure extends Sensor implements SensorEventListener {
+public class Pressure extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
     android.hardware.Sensor pressureSensor;
 
     private float millibars;
 
-    public AirPressure(Context context) {
+    public Pressure(Context context) {
         super(context, "Pressure", 100, new String[]{"Milliseconds", "Millibars"});
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.pressureSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_PRESSURE);
@@ -34,7 +34,7 @@ public class AirPressure extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new AirPressureData(new Date().getTime() - startDate, millibars));
+                    data.add(new PressureData(new Date().getTime() - startDate, millibars));
                 }
             }
         }, 0, interval);

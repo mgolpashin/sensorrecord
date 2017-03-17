@@ -1,13 +1,13 @@
-package de.martingolpashin.sensor_record.models.sensors.airpressure;
+package de.martingolpashin.sensor_record.models.sensors.pressure;
 
 /**
  * Created by martin on 14.10.16.
  */
-public class AirPressureData {
+public class PressureData {
     private long millis;
     private float millibars;
 
-    public AirPressureData(long milliseconds, float millibars) {
+    public PressureData(long milliseconds, float millibars) {
         this.millis = milliseconds;
         this.millibars = millibars;
     }
