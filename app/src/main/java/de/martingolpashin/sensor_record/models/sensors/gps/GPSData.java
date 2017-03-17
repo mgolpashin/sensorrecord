@@ -21,4 +21,10 @@ public class GPSData {
     public long getMillis() {
         return millis;
     }
+
+    @Override
+    public String toString() {
+        return this.getMillis() + ";" + this.getLocation().getLatitude() + ";" + this.getLocation().getLongitude() + ";" + this.getLocation().getAltitude() + ";" + System.getProperty("line.separator");
+    }
+
 }
