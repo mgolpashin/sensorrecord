@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.Timer;
 
 import de.martingolpashin.sensor_record.R;
-import de.martingolpashin.sensor_record.models.sensors.light.LightData;
 
 /**
  * Created by martin on 16.10.16.

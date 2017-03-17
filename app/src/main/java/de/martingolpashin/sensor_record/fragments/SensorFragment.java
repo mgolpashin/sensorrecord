@@ -115,20 +115,6 @@ public class SensorFragment extends Fragment {
         btn_record_stop.setImageResource(R.drawable.ic_fiber_manual_record_white_24dp);
     }
 
-//    @Click
-//    public void check_gps() {
-//        if(check_gps.isChecked() && ContextCompat.checkSelfPermission(this.activity,
-//                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-//            check_gps.setChecked(false);
-//            ActivityCompat.requestPermissions(this.activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, this.activity.PERMISSION_ACCESS_FINE_LOCATION);
-//            return;
-//        }
-//
-//        edit_gps.setEnabled(check_gps.isChecked());
-//        gps.setActive(check_gps.isChecked());
-//        checkRecordBtnEnabled();
-//    }
-
     private void _enableControls(boolean enabled) {
         _enableCheckboxes(enabled);
         _enableIntervalControls(enabled);

@@ -51,12 +51,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         notifyDataSetChanged();
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
     public FileAdapter(List<File> files) {
         this.files = files;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public FileAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {

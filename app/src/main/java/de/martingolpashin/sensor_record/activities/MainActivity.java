@@ -1,5 +1,6 @@
 package de.martingolpashin.sensor_record.activities;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -22,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.martingolpashin.sensor_record.R;
+import de.martingolpashin.sensor_record.SensorRecordApplication;
 import de.martingolpashin.sensor_record.adapter.FileAdapter;
 import de.martingolpashin.sensor_record.adapter.PagerAdapter;
 import de.martingolpashin.sensor_record.fragments.FileFragment;
@@ -36,6 +38,8 @@ import de.martingolpashin.sensor_record.utils.FileHandler;
 public class MainActivity extends AppCompatActivity{
     public final int PERMISSION_ACCESS_FINE_LOCATION = 1;
     public final int PERMISSION_WRITE_EXTERNAL_STORAGE = 2;
+
+    SensorRecordApplication app;
 
     @ViewById
     RelativeLayout main_layout;
@@ -58,6 +62,9 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        app = (SensorRecordApplication) getApplicationContext();
+
         setContentView(R.layout.activity_main);
 
         this.sensorHandler = new SensorHandler(this);
@@ -72,6 +79,29 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         this.adapter = new FileAdapter(this.files);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        app.setCurrentActivity(this);
+    }
+
+    @Override
+    protected void onPause() {
+        clearReferences();
+        super.onPause();
+    }
+
+    protected void onDestroy() {
+        clearReferences();
+        super.onDestroy();
+    }
+
+    private void clearReferences(){
+        Activity currActivity = app.getCurrentActivity();
+        if (this.equals(currActivity))
+            app.setCurrentActivity(null);
     }
 
     @AfterViews
