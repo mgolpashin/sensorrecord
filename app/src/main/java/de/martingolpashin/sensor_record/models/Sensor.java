@@ -78,6 +78,7 @@ public class Sensor {
     public File writeToCSV(String fileName, File dir, boolean includeDateTime) {
         this.timer.cancel();
         fileName = includeDateTime ? fileName + "_" + name : name;
+        fileName += ".csv";
         File file = new File(dir, fileName);
 
         try {
