@@ -1,4 +1,4 @@
-package de.martingolpashin.sensor_record.models.sensors.light;
+package de.martingolpashin.sensor_record.models.sensors.rotation_vector;
 
 import android.content.Context;
 import android.hardware.SensorEvent;
@@ -16,16 +16,20 @@ import de.martingolpashin.sensor_record.models.Sensor;
  * Created by martin on 16.10.16.
  */
 @EBean
-public class Light extends Sensor implements SensorEventListener {
+public class RotationVector extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
-    private android.hardware.Sensor lightSensor;
-    private float illuminance;
-    private String name = "AmbientTemperature";
+    private android.hardware.Sensor rotationVectorSensor;
+    private float x;
+    private float y;
+    private float z;
+    private float cos;
+    private float headingAccuracy;
+    private String name = "RotationVector";
 
-    public Light(Context context) {
-        super(context, "AmbientTemperature", 100, new String[]{"Milliseconds", "Illuminance"});
+    public RotationVector(Context context) {
+        super(context, "RotationVector", 100, new String[]{"Milliseconds", "X", "Y", "Z", "cos", "headingAccuracy"});
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
-        this.lightSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LIGHT);
+        this.rotationVectorSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ROTATION_VECTOR);
     }
 
     @Override
@@ -34,7 +38,7 @@ public class Light extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new LightData(new Date().getTime() - startDate, illuminance));
+                    data.add(new RotationVectorData(new Date().getTime() - startDate, x, y, z, cos, headingAccuracy));
                 }
             }
         }, 0, interval);
@@ -43,7 +47,7 @@ public class Light extends Sensor implements SensorEventListener {
     public void setActive(boolean isActive) {
         this.active = isActive;
         if(isActive) {
-            this.sensorManager.registerListener(this, this.lightSensor, SensorManager.SENSOR_DELAY_FASTEST);
+            this.sensorManager.registerListener(this, this.rotationVectorSensor, SensorManager.SENSOR_DELAY_FASTEST);
         } else {
             this.sensorManager.unregisterListener(this);
         }
@@ -53,8 +57,12 @@ public class Light extends Sensor implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         android.hardware.Sensor sensor = event.sensor;
 
-        if (sensor.getType() == android.hardware.Sensor.TYPE_LIGHT) {
-            this.illuminance = event.values[0];
+        if (sensor.getType() == android.hardware.Sensor.TYPE_ROTATION_VECTOR) {
+            this.x = event.values[0];
+            this.y = event.values[1];
+            this.z = event.values[2];
+            this.cos = event.values[3];
+            this.headingAccuracy = event.values[4];
         }
     }
 

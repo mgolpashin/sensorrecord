@@ -1,4 +1,4 @@
-package de.martingolpashin.sensor_record.models.sensors.light;
+package de.martingolpashin.sensor_record.models.sensors.gravity;
 
 import android.content.Context;
 import android.hardware.SensorEvent;
@@ -16,16 +16,19 @@ import de.martingolpashin.sensor_record.models.Sensor;
  * Created by martin on 16.10.16.
  */
 @EBean
-public class Light extends Sensor implements SensorEventListener {
+public class Gravity extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
-    private android.hardware.Sensor lightSensor;
-    private float illuminance;
-    private String name = "AmbientTemperature";
+    private android.hardware.Sensor gravitySensor;
+    private float x;
+    private float y;
+    private float z;
 
-    public Light(Context context) {
-        super(context, "AmbientTemperature", 100, new String[]{"Milliseconds", "Illuminance"});
+    private String name = "Gravity";
+
+    public Gravity(Context context) {
+        super(context, "Gravity", 100, new String[]{"Milliseconds", "X", "Y", "Z"});
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
-        this.lightSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LIGHT);
+        this.gravitySensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_GRAVITY);
     }
 
     @Override
@@ -34,7 +37,7 @@ public class Light extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new LightData(new Date().getTime() - startDate, illuminance));
+                    data.add(new GravityData(new Date().getTime() - startDate, x, y, z));
                 }
             }
         }, 0, interval);
@@ -43,7 +46,7 @@ public class Light extends Sensor implements SensorEventListener {
     public void setActive(boolean isActive) {
         this.active = isActive;
         if(isActive) {
-            this.sensorManager.registerListener(this, this.lightSensor, SensorManager.SENSOR_DELAY_FASTEST);
+            this.sensorManager.registerListener(this, this.gravitySensor, SensorManager.SENSOR_DELAY_FASTEST);
         } else {
             this.sensorManager.unregisterListener(this);
         }
@@ -53,8 +56,10 @@ public class Light extends Sensor implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         android.hardware.Sensor sensor = event.sensor;
 
-        if (sensor.getType() == android.hardware.Sensor.TYPE_LIGHT) {
-            this.illuminance = event.values[0];
+        if (sensor.getType() == android.hardware.Sensor.TYPE_GRAVITY) {
+            this.x = event.values[0];
+            this.y = event.values[1];
+            this.z = event.values[2];
         }
     }
 
