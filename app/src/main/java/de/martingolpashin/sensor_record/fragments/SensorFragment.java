@@ -90,7 +90,7 @@ public class SensorFragment extends Fragment {
 
         activity.record();
         isRecording = true;
-        btn_record_stop.setImageResource(R.drawable.ic_stop_white_24dp);
+        btn_record_stop.setImageResource(R.drawable.ic_stop_white_36dp);
     }
 
     private boolean hasMinInterval() {
@@ -112,7 +112,7 @@ public class SensorFragment extends Fragment {
         _resumeControls();
 
         isRecording = false;
-        btn_record_stop.setImageResource(R.drawable.ic_fiber_manual_record_white_24dp);
+        btn_record_stop.setImageResource(R.drawable.ic_fiber_manual_record_white_36dp);
     }
 
     private void _enableControls(boolean enabled) {

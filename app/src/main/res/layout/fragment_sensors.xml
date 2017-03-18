@@ -34,7 +34,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center|bottom"
-            android:src="@drawable/ic_fiber_manual_record_white_24dp"
+            android:src="@drawable/ic_fiber_manual_record_white_36dp"
             android:layout_margin="16dp" />
     </LinearLayout>
 

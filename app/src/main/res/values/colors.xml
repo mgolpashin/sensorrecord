@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="material_red_400">#EF5350</color>
+    <color name="material_pink_400">#EC407A</color>
+    <color name="material_purple_400">#AB47BC</color>
+    <color name="material_deep_purple_400">#7E57C2</color>
+    <color name="material_indigo_400">#5C6BC0</color>
+    <color name="material_blue_400">#42A5F5</color>
+    <color name="material_light_blue_400">#29B6F6</color>
+    <color name="material_cyan_400">#26C6DA</color>
+    <color name="material_teal_400">#26A69A</color>
+    <color name="material_green_400">#66BB6A</color>
+    <color name="material_light_green_400">#9CCC65</color>
+</resources>

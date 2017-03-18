@@ -2,7 +2,6 @@ package de.martingolpashin.sensor_record.adapter;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -116,7 +115,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(v.getContext())
-                        .setIcon(R.drawable.ic_warning_black_24dp)
                         .setTitle("Delete Folder")
                         .setMessage("Are you sure you want to delete " + dir.getName() + " ?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -177,39 +175,39 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         holder.iconText.setVisibility(View.VISIBLE);
         holder.icon.setVisibility(View.GONE);
 
-        if(fileName.contains("Accelerometer")) {
+        if(fileName.contains("Accelerometer") && !fileName.contains("Linear")) {
             holder.iconText.setText("A");
-            holder.iconText.setBackgroundColor(Color.parseColor("#283593"));
+            holder.iconText.setBackgroundResource(R.color.material_red_400);
+        } else if(fileName.contains("AccelerometerLinear")) {
+            holder.iconText.setText("AL");
+            holder.iconText.setBackgroundResource(R.color.material_pink_400);
         } else if(fileName.contains("AmbientTemperature")) {
             holder.iconText.setText("AT");
-            holder.iconText.setBackgroundColor(Color.parseColor("#fe3264"));
+            holder.iconText.setBackgroundResource(R.color.material_purple_400);
         } else if(fileName.contains("Compass")) {
             holder.iconText.setText("C");
-            holder.iconText.setBackgroundColor(Color.parseColor("#ff8f00"));
+            holder.iconText.setBackgroundResource(R.color.material_deep_purple_400);
         } else if(fileName.contains("GPS")) {
             holder.iconText.setText("GPS");
-            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
+            holder.iconText.setBackgroundResource(R.color.material_indigo_400);
         } else if(fileName.contains("Gravity")) {
             holder.iconText.setText("Gr");
-            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
+            holder.iconText.setBackgroundResource(R.color.material_blue_400);
         } else if(fileName.contains("Gyroscope")) {
             holder.iconText.setText("Gy");
-            holder.iconText.setBackgroundColor(Color.parseColor("#c62828"));
+            holder.iconText.setBackgroundResource(R.color.material_light_blue_400);
         } else if(fileName.contains("Light")) {
             holder.iconText.setText("L");
-            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
-        } else if(fileName.contains("LinearAccelerometer")) {
-            holder.iconText.setText("LA");
-            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
+            holder.iconText.setBackgroundResource(R.color.material_cyan_400);
         } else if(fileName.contains("Pressure")) {
             holder.iconText.setText("Pre");
-            holder.iconText.setBackgroundColor(Color.parseColor("#fe3264"));
+            holder.iconText.setBackgroundResource(R.color.material_teal_400);
         } else if(fileName.contains("Proximity")) {
             holder.iconText.setText("Pro");
-            holder.iconText.setBackgroundColor(Color.parseColor("#fe3264"));
+            holder.iconText.setBackgroundResource(R.color.material_green_400);
         } else if(fileName.contains("RotationVector")) {
             holder.iconText.setText("RV");
-            holder.iconText.setBackgroundColor(Color.parseColor("#00838f"));
+            holder.iconText.setBackgroundResource(R.color.material_light_green_400);
         }
 
         if(holder.status == null) {
@@ -233,7 +231,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(v.getContext())
-                        .setIcon(R.drawable.ic_warning_black_24dp)
                         .setTitle("Delete File")
                         .setMessage("Are you sure you want to delete " + file.getName() + " ?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {

@@ -5,9 +5,7 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette-->
-        <item name="colorPrimary">#2196F3</item>
-        <item name="colorPrimaryDark">#1976D2</item>
-        <item name="colorAccent">#f44336</item>
+        <item name="colorAccent">#E53935</item>
     </style>
 
     <style name="AppTabLayout" parent="Widget.Design.TabLayout">
