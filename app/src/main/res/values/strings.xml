@@ -5,4 +5,5 @@
     <string name="delete">delete</string>
     <string name="sensor_accelerometer">Accelerometer</string>
     <string name="interval">Interval in ms</string>
+    <string name="share">senden</string>
 </resources>

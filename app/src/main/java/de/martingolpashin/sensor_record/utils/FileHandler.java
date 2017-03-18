@@ -42,4 +42,9 @@ public class FileHandler {
         return dir;
     }
 
+    public static File convertToZip(File dir) {
+        File zip = new File(dir, dir.getName() + ".zip");
+        Compress.zip(dir.listFiles(), zip);
+        return zip;
+    }
 }

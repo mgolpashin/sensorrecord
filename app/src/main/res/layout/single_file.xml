@@ -52,8 +52,8 @@
         android:singleLine="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:layout_toLeftOf="@+id/button_delete"
-        android:layout_toStartOf="@+id/button_delete" />
+        android:layout_toLeftOf="@+id/button_share"
+        android:layout_toStartOf="@+id/button_share" />
 
     <ImageButton
         android:id="@+id/button_delete"
@@ -68,4 +68,19 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:contentDescription="@string/delete" />
+
+    <ImageButton
+        android:id="@+id/button_share"
+        android:src="@drawable/ic_share_white_24dp"
+        android:tint="@color/material_grey_600"
+        android:background="@android:color/transparent"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:padding="12dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/button_delete"
+        android:layout_toStartOf="@id/button_delete"
+        android:contentDescription="@string/share" />
+
 </RelativeLayout>

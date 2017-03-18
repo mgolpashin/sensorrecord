@@ -1,5 +1,6 @@
 package de.martingolpashin.sensor_record.adapter;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import de.martingolpashin.sensor_record.R;
 import de.martingolpashin.sensor_record.models.FileStatus;
+import de.martingolpashin.sensor_record.utils.FileHandler;
 
 /**
  * Created by martin on 13.11.16.
@@ -33,15 +35,17 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         public ImageView icon;
         public TextView iconText;
         public TextView fileName;
+        public ImageButton shareButton;
         public ImageButton deleteButton;
         public FileStatus status;
 
-        public ViewHolder(RelativeLayout layout, ImageView icon, TextView iconText, TextView fileName, ImageButton deleteButton, FileStatus status) {
+        public ViewHolder(RelativeLayout layout, ImageView icon, TextView iconText, TextView fileName, ImageButton shareButton, ImageButton deleteButton, FileStatus status) {
             super(layout);
             this.layout = layout;
             this.icon = icon;
             this.iconText = iconText;
             this.fileName = fileName;
+            this.shareButton = shareButton;
             this.deleteButton = deleteButton;
             this.status = status;
         }
@@ -64,8 +68,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         ImageView icon = (ImageView) layout.findViewById(R.id.icon);
         TextView iconText = (TextView) layout.findViewById(R.id.icon_text);
         TextView fileName = (TextView) layout.findViewById(R.id.file_name);
+        ImageButton shareButton = (ImageButton) layout.findViewById(R.id.button_share);
         ImageButton deleteButton = (ImageButton) layout.findViewById(R.id.button_delete);
-        return new ViewHolder(layout, icon, iconText, fileName, deleteButton, null);
+        return new ViewHolder(layout, icon, iconText, fileName, shareButton, deleteButton, null);
     }
 
     @Override
@@ -91,7 +96,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         holder.iconText.setVisibility(View.GONE);
         holder.icon.setVisibility(View.VISIBLE);
 
-        holder.icon.setBackgroundColor(holder.layout.getResources().getColor(R.color.material_grey_600));
+        holder.icon.setBackgroundResource(R.color.material_grey_600);
 
         if(holder.status == FileStatus.DIR_OPENED) {
             holder.icon.setImageResource(R.drawable.ic_folder_open_white_24dp);
@@ -111,6 +116,14 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
             }
         });
 
+        holder.shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File zipFile = FileHandler.convertToZip(dir);
+                startIntent(v.getContext(), zipFile, Intent.ACTION_SEND);
+            }
+        });
+
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,16 +133,16 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(holder.status == FileStatus.DIR_OPENED) {
+                                if (holder.status == FileStatus.DIR_OPENED) {
                                     closeDir(holder, dir);
                                 }
 
-                                for(File file : dir.listFiles()) {
-                                    if(!file.delete()) {
+                                for (File file : dir.listFiles()) {
+                                    if (!file.delete()) {
                                         return;
                                     }
                                 }
-                                if(dir.delete()) {
+                                if (dir.delete()) {
                                     files.remove(position);
                                     notifyItemRemoved(position);
                                     notifyItemRangeChanged(position, getItemCount());
@@ -175,7 +188,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         holder.iconText.setVisibility(View.VISIBLE);
         holder.icon.setVisibility(View.GONE);
 
-        if(fileName.contains("Accelerometer") && !fileName.contains("Linear")) {
+        if (fileName.endsWith(".zip")) {
+            holder.iconText.setText("ZIP");
+            holder.iconText.setBackgroundResource(R.color.material_brown_400);
+        } else if(fileName.contains("Accelerometer") && !fileName.contains("Linear")) {
             holder.iconText.setText("A");
             holder.iconText.setBackgroundResource(R.color.material_red_400);
         } else if(fileName.contains("AccelerometerLinear")) {
@@ -217,13 +233,14 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent openFileIntent = new Intent(Intent.ACTION_VIEW);
-                Uri fileUri = FileProvider.getUriForFile(v.getContext(), "de.martingolpashin.sensor_record.files", file);
-                String mime = v.getContext().getContentResolver().getType(fileUri);
-                openFileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                openFileIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                openFileIntent.setDataAndType(fileUri, mime);
-                v.getContext().startActivity(openFileIntent);
+                startIntent(v.getContext(), file, Intent.ACTION_VIEW);
+            }
+        });
+
+        holder.shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startIntent(v.getContext(), file, Intent.ACTION_SEND);
             }
         });
 
@@ -236,7 +253,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(file.delete()) {
+                                if (file.delete()) {
                                     files.remove(position);
                                     notifyItemRemoved(position);
                                     notifyItemRangeChanged(position, getItemCount());
@@ -248,5 +265,29 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                         .show();
             }
         });
+
+
+    }
+
+    private void startIntent(Context context, File file, String action) {
+        Intent intent = new Intent(action);
+        Uri fileUri = FileProvider.getUriForFile(context, "de.martingolpashin.sensor_record.files", file);
+        String mime = context.getContentResolver().getType(fileUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        switch (action) {
+            case Intent.ACTION_SEND:
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Sensor Record data");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{""});
+                intent.setType(mime);
+                break;
+            case Intent.ACTION_VIEW:
+                intent.setDataAndType(fileUri, mime);
+                break;
+        }
+
+        context.startActivity(intent);
     }
 }
