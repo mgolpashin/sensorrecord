@@ -29,15 +29,16 @@ public class SensorHandler {
 
     public SensorHandler(Context context) {
         this.sensors = new ArrayList<>();
-        this.sensors.add(new GPS(context));
+
         this.sensors.add(new Accelerometer(context));
-        this.sensors.add(new LinearAccelerometer(context));
-        this.sensors.add(new Gyroscope(context));
-        this.sensors.add(new Compass(context));
-        this.sensors.add(new Pressure(context));
-        this.sensors.add(new Light(context));
         this.sensors.add(new AmbientTemperature(context));
+        this.sensors.add(new Compass(context));
+        this.sensors.add(new GPS(context));
         this.sensors.add(new Gravity(context));
+        this.sensors.add(new Gyroscope(context));
+        this.sensors.add(new Light(context));
+        this.sensors.add(new LinearAccelerometer(context));
+        this.sensors.add(new Pressure(context));
         this.sensors.add(new RotationVector(context));
     }
 
