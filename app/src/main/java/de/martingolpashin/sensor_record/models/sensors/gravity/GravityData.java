@@ -1,9 +1,11 @@
 package de.martingolpashin.sensor_record.models.sensors.gravity;
 
+import de.martingolpashin.sensor_record.models.SensorData;
+
 /**
  * Created by martin on 14.10.16.
  */
-public class GravityData {
+public class GravityData extends SensorData{
     private long millis;
     private float x;
     private float y;
@@ -34,6 +36,6 @@ public class GravityData {
 
     @Override
     public String toString() {
-        return this.getMillis() + ";" + this.getX() + ";" + this.getY() + ";" + this.getZ() + ";" + System.getProperty("line.separator");
+        return this.getMillis() + getSeperator() + this.getX() + getSeperator() + this.getY() + getSeperator() + this.getZ() + System.getProperty("line.separator");
     }
 }

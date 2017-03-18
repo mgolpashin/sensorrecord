@@ -20,10 +20,10 @@ public class Light extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
     private android.hardware.Sensor lightSensor;
     private float illuminance;
-    private String name = "AmbientTemperature";
+    private String name = "Light";
 
     public Light(Context context) {
-        super(context, "AmbientTemperature", 100, new String[]{"Milliseconds", "Illuminance"});
+        super(context, "Light", 100, new String[]{"Milliseconds", "Illuminance"});
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         this.lightSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LIGHT);
     }

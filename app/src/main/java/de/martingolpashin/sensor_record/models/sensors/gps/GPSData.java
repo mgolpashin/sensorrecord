@@ -2,10 +2,12 @@ package de.martingolpashin.sensor_record.models.sensors.gps;
 
 import android.location.Location;
 
+import de.martingolpashin.sensor_record.models.SensorData;
+
 /**
  * Created by martin on 14.10.16.
  */
-public class GPSData {
+public class GPSData extends SensorData{
     private long millis;
     private Location location;
 
@@ -24,7 +26,7 @@ public class GPSData {
 
     @Override
     public String toString() {
-        return this.getMillis() + ";" + this.getLocation().getLatitude() + ";" + this.getLocation().getLongitude() + ";" + this.getLocation().getAltitude() + ";" + System.getProperty("line.separator");
+        return this.getMillis() + getSeperator() + this.getLocation().getLatitude() + getSeperator() + this.getLocation().getLongitude() + getSeperator() + this.getLocation().getAltitude() + System.getProperty("line.separator");
     }
 
 }

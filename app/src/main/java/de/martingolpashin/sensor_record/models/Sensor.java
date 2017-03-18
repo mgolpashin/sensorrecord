@@ -33,7 +33,7 @@ public class Sensor {
     private EditText editText;
 
     private String[] columns;
-    private String seperator = ";";
+    private String seperator = ",";
     private LinearLayout view;
 
     public Sensor(Context context, String name, int defaultValue, String[] columns) {

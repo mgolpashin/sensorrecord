@@ -1,9 +1,11 @@
 package de.martingolpashin.sensor_record.models.sensors.ambient_temperature;
 
+import de.martingolpashin.sensor_record.models.SensorData;
+
 /**
  * Created by martin on 14.10.16.
  */
-public class AmbientTemperatureData {
+public class AmbientTemperatureData extends SensorData{
     private long millis;
     private float degree;
 
@@ -22,6 +24,6 @@ public class AmbientTemperatureData {
 
     @Override
     public String toString() {
-        return this.getMillis() + ";" + this.getDegree() + ";" + System.getProperty("line.separator");
+        return this.getMillis() + getSeperator() + this.getDegree() + System.getProperty("line.separator");
     }
 }

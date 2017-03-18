@@ -1,9 +1,11 @@
 package de.martingolpashin.sensor_record.models.sensors.rotation_vector;
 
+import de.martingolpashin.sensor_record.models.SensorData;
+
 /**
  * Created by martin on 14.10.16.
  */
-public class RotationVectorData {
+public class RotationVectorData extends SensorData{
     private long millis;
     private float x;
     private float y;
@@ -46,6 +48,6 @@ public class RotationVectorData {
 
     @Override
     public String toString() {
-        return this.getMillis() + ";" + this.getX() + ";" + this.getY() + ";" + this.getZ() + ";" + this.getCos() + ";" + this.getHeadingAccuracy() + ";" + System.getProperty("line.separator");
+        return this.getMillis() + getSeperator() + this.getX() + getSeperator() + this.getY() + getSeperator() + this.getZ() + getSeperator() + this.getCos() + getSeperator() + this.getHeadingAccuracy() + System.getProperty("line.separator");
     }
 }

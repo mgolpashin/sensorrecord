@@ -50,6 +50,9 @@
         android:layout_toRightOf="@+id/layout_icon"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:layout_toEndOf="@+id/layout_icon" />
 
     <ImageButton

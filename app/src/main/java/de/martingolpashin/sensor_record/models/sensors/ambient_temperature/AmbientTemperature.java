@@ -23,7 +23,7 @@ public class AmbientTemperature extends Sensor implements SensorEventListener {
     private String name = "AmbientTemperature";
 
     public AmbientTemperature(Context context) {
-        super(context, "AmbientTemperature", 100, new String[]{"Milliseconds", "Degree"});
+        super(context, "AmbientTemperature", 100, new String[]{"Milliseconds", "Degrees"});
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         this.degreeSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_AMBIENT_TEMPERATURE);
     }
