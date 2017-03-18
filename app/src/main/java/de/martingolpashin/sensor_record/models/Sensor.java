@@ -83,8 +83,11 @@ public class Sensor {
         try {
             FileWriter fw = new FileWriter(file);
             String head = "";
-            for(String column : this.columns) {
-                head += column + seperator;
+            for (int i = 0; i < this.columns.length; i++) {
+                head += this.columns[i];
+                if(i < this.columns.length - 1) {
+                    head += seperator;
+                }
             }
             fw.write(head + System.getProperty("line.separator"));
 
