@@ -103,7 +103,7 @@ public class SensorFragment extends Fragment {
     }
 
     void onStopClicked() {
-        String fileFormat = "yyyy-MM-dd_HH:mm:ss";
+        String fileFormat = "yyyy-MM-dd_HH-mm-ss";
         SimpleDateFormat format = new SimpleDateFormat(fileFormat, Locale.GERMAN);
         String fileName = format.format(_activeRecordStart);
         activity.writeCSVs(fileName);
