@@ -128,43 +128,20 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void writeCSVs(String fileName) {
-        File dir = FileHandler.getWritableStorageDir(this);
-        boolean saveDir = multipleSensorsRecording();
-        if(saveDir) {
-            dir = new File(dir + File.separator + fileName);
-            if(!dir.exists()) {
-                dir.mkdir();
-            }
+        File dir = new File(FileHandler.getWritableStorageDir(this) + File.separator + fileName);
+        if(!dir.exists()) {
+            dir.mkdir();
         }
 
         for(Sensor s : sensorHandler.getSensors()) {
             if(s.isRecording()) {
-                File file = s.writeToCSV(fileName, dir, !saveDir);
-                if(file != null) {
-                    if(!saveDir) {
-                        Snackbar.make(this.main_layout, file.getName() + " saved", Snackbar.LENGTH_LONG).show();
-                        this.adapter.add(file);
-                    }
-                }
+                s.writeToCSV(fileName, dir, false);
                 s.setRecording(false);
             }
         }
 
-        if(saveDir) {
-            Snackbar.make(this.main_layout, dir.getName() + " saved", Snackbar.LENGTH_LONG).show();
-            this.adapter.add(dir);
-        }
-    }
-
-    private boolean multipleSensorsRecording() {
-        int count = 0;
-        for(Sensor s : sensorHandler.getSensors()) {
-            if(s.isRecording()) {
-                count ++;
-            }
-        }
-
-        return count > 1;
+        Snackbar.make(this.main_layout, dir.getName() + " saved", Snackbar.LENGTH_LONG).show();
+        this.adapter.add(dir);
     }
 
     public void resetSensors() {
