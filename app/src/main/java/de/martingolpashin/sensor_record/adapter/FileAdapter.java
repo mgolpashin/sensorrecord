@@ -265,8 +265,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
                         .show();
             }
         });
-
-
     }
 
     private void startIntent(Context context, File file, String action) {
