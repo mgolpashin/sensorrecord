@@ -1,4 +1,4 @@
-package de.martingolpashin.sensor_record.models.sensors.linear_accelerometer;
+package de.martingolpashin.sensor_record.models.sensors.accelerometer_linear;
 
 import android.content.Context;
 import android.hardware.SensorEvent;
@@ -16,7 +16,7 @@ import de.martingolpashin.sensor_record.models.Sensor;
  * Created by martin on 16.10.16.
  */
 @EBean
-public class LinearAccelerometer extends Sensor implements SensorEventListener {
+public class AccelerometerLinear extends Sensor implements SensorEventListener {
     private float x;
     private float y;
     private float z;
@@ -24,8 +24,8 @@ public class LinearAccelerometer extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
     android.hardware.Sensor accelerometer;
 
-    public LinearAccelerometer(Context context) {
-        super(context, "LinearAccelerometer", 10, new String[]{"Milliseconds", "X", "Y", "Z"});
+    public AccelerometerLinear(Context context) {
+        super(context, "AccelerometerLinear", 10, new String[]{"Milliseconds", "X", "Y", "Z"});
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LINEAR_ACCELERATION);
     }
@@ -36,7 +36,7 @@ public class LinearAccelerometer extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new LinearAccelerometerData(new Date().getTime() - startDate, x, y, z));
+                    data.add(new AccelerometerLinearData(new Date().getTime() - startDate, x, y, z));
                 }
             }
         }, 0, interval);

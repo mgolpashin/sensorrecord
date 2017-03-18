@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.martingolpashin.sensor_record.models.sensors.accelerometer.Accelerometer;
+import de.martingolpashin.sensor_record.models.sensors.accelerometer_linear.AccelerometerLinear;
 import de.martingolpashin.sensor_record.models.sensors.pressure.Pressure;
 import de.martingolpashin.sensor_record.models.sensors.ambient_temperature.AmbientTemperature;
 import de.martingolpashin.sensor_record.models.sensors.compass.Compass;
@@ -15,7 +16,6 @@ import de.martingolpashin.sensor_record.models.sensors.gps.GPS;
 import de.martingolpashin.sensor_record.models.sensors.gravity.Gravity;
 import de.martingolpashin.sensor_record.models.sensors.gyroscope.Gyroscope;
 import de.martingolpashin.sensor_record.models.sensors.light.Light;
-import de.martingolpashin.sensor_record.models.sensors.linear_accelerometer.LinearAccelerometer;
 import de.martingolpashin.sensor_record.models.sensors.rotation_vector.RotationVector;
 
 /**
@@ -37,7 +37,7 @@ public class SensorHandler {
         this.sensors.add(new Gravity(context));
         this.sensors.add(new Gyroscope(context));
         this.sensors.add(new Light(context));
-        this.sensors.add(new LinearAccelerometer(context));
+        this.sensors.add(new AccelerometerLinear(context));
         this.sensors.add(new Pressure(context));
         this.sensors.add(new RotationVector(context));
     }
