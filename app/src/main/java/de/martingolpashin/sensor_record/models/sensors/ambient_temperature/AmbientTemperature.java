@@ -12,15 +12,11 @@ import java.util.TimerTask;
 
 import de.martingolpashin.sensor_record.models.Sensor;
 
-/**
- * Created by martin on 16.10.16.
- */
 @EBean
 public class AmbientTemperature extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
     private android.hardware.Sensor degreeSensor;
     private float degree;
-    private String name = "AmbientTemperature";
 
     public AmbientTemperature(Context context) {
         super(context, "AmbientTemperature", 100, new String[]{"Milliseconds", "Degrees"});

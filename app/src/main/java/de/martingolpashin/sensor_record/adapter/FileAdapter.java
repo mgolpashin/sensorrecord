@@ -23,9 +23,6 @@ import de.martingolpashin.sensor_record.R;
 import de.martingolpashin.sensor_record.models.FileStatus;
 import de.martingolpashin.sensor_record.utils.FileHandler;
 
-/**
- * Created by martin on 13.11.16.
- */
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     private List<File> files;
     private ArrayList<File> openDirs = new ArrayList<>();

@@ -2,9 +2,6 @@ package de.martingolpashin.sensor_record.models.sensors.accelerometer_linear;
 
 import de.martingolpashin.sensor_record.models.SensorData;
 
-/**
- * Created by martin on 14.10.16.
- */
 public class AccelerometerLinearData extends SensorData{
     private long millis;
     private float x;

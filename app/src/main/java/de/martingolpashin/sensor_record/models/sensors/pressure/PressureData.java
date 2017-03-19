@@ -2,9 +2,6 @@ package de.martingolpashin.sensor_record.models.sensors.pressure;
 
 import de.martingolpashin.sensor_record.models.SensorData;
 
-/**
- * Created by martin on 14.10.16.
- */
 public class PressureData extends SensorData{
     private long millis;
     private float millibars;

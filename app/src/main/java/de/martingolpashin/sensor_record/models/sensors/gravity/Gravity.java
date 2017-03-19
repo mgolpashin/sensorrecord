@@ -12,9 +12,6 @@ import java.util.TimerTask;
 
 import de.martingolpashin.sensor_record.models.Sensor;
 
-/**
- * Created by martin on 16.10.16.
- */
 @EBean
 public class Gravity extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
@@ -22,8 +19,6 @@ public class Gravity extends Sensor implements SensorEventListener {
     private float x;
     private float y;
     private float z;
-
-    private String name = "Gravity";
 
     public Gravity(Context context) {
         super(context, "Gravity", 100, new String[]{"Milliseconds", "X", "Y", "Z"});

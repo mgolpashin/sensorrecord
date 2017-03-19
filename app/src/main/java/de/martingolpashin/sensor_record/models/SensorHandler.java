@@ -18,10 +18,6 @@ import de.martingolpashin.sensor_record.models.sensors.gyroscope.Gyroscope;
 import de.martingolpashin.sensor_record.models.sensors.light.Light;
 import de.martingolpashin.sensor_record.models.sensors.rotation_vector.RotationVector;
 
-/**
- * Created by martin on 16.03.17.
- */
-
 @EBean
 public class SensorHandler {
 
@@ -31,13 +27,13 @@ public class SensorHandler {
         this.sensors = new ArrayList<>();
 
         this.sensors.add(new Accelerometer(context));
+        this.sensors.add(new AccelerometerLinear(context));
         this.sensors.add(new AmbientTemperature(context));
         this.sensors.add(new Compass(context));
         this.sensors.add(new GPS(context));
         this.sensors.add(new Gravity(context));
         this.sensors.add(new Gyroscope(context));
         this.sensors.add(new Light(context));
-        this.sensors.add(new AccelerometerLinear(context));
         this.sensors.add(new Pressure(context));
         this.sensors.add(new RotationVector(context));
     }

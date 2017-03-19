@@ -7,9 +7,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import de.martingolpashin.sensor_record.fragments.FileFragment;
 import de.martingolpashin.sensor_record.fragments.SensorFragment;
 
-/**
- * Created by martin on 15.03.17.
- */
 public class PagerAdapter extends FragmentPagerAdapter {
 
     private SensorFragment sensorFragment;

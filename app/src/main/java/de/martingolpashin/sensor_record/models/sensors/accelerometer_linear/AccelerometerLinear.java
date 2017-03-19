@@ -12,9 +12,6 @@ import java.util.TimerTask;
 
 import de.martingolpashin.sensor_record.models.Sensor;
 
-/**
- * Created by martin on 16.10.16.
- */
 @EBean
 public class AccelerometerLinear extends Sensor implements SensorEventListener {
     private float x;

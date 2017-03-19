@@ -8,9 +8,6 @@ import android.support.v4.content.ContextCompat;
 
 import java.io.File;
 
-/**
- * Created by martin on 15.11.16.
- */
 public class FileHandler {
 
     public static File getWritableStorageDir(Context context) {

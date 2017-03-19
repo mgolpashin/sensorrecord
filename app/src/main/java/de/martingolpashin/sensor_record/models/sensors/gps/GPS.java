@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -22,12 +23,8 @@ import java.util.Date;
 import java.util.TimerTask;
 
 import de.martingolpashin.sensor_record.SensorRecordApplication;
-import de.martingolpashin.sensor_record.activities.MainActivity;
 import de.martingolpashin.sensor_record.models.Sensor;
 
-/**
- * Created by martin on 16.10.16.
- */
 @EBean
 public class GPS extends Sensor implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
     private Location lastKnownLocation;
@@ -41,11 +38,10 @@ public class GPS extends Sensor implements GoogleApiClient.ConnectionCallbacks, 
             @Override
             public void onClick(View v) {
                 Activity currentActivity = ((SensorRecordApplication) context.getApplicationContext()).getCurrentActivity();
-                if(checkBox.isChecked() && ContextCompat.checkSelfPermission(currentActivity,
+                if (checkBox.isChecked() && ContextCompat.checkSelfPermission(currentActivity,
                         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
                     checkBox.setChecked(false);
                     ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    return;
                 }
             }
         });
@@ -86,8 +82,14 @@ public class GPS extends Sensor implements GoogleApiClient.ConnectionCallbacks, 
     public void onConnected(Bundle bundle) {
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(this.interval);
-        //TODO add permission check
-        LocationServices.FusedLocationApi.requestLocationUpdates(this.googleApiClient, locationRequest, this);
+        Activity currentActivity = ((SensorRecordApplication) context.getApplicationContext()).getCurrentActivity();
+        if(ContextCompat.checkSelfPermission(currentActivity,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(this.googleApiClient, locationRequest, this);
+        } else {
+            getCheckBox().setChecked(false);
+            ActivityCompat.requestPermissions(currentActivity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
     }
 
 
@@ -100,5 +102,5 @@ public class GPS extends Sensor implements GoogleApiClient.ConnectionCallbacks, 
     public void onConnectionSuspended(int i) {}
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {}
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 }

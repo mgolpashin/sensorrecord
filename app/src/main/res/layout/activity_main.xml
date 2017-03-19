@@ -21,13 +21,13 @@
             android:id="@+id/sensortab"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Sensors | ms"/>
+            android:text="@string/tab_sensors"/>
 
         <android.support.design.widget.TabItem
             android:id="@+id/filestab"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Files"/>
+            android:text="@string/tab_files"/>
 
     </android.support.design.widget.TabLayout>
 

@@ -3,6 +3,7 @@ package de.martingolpashin.sensor_record.activities;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -50,8 +51,6 @@ public class MainActivity extends AppCompatActivity{
     @ViewById
     ViewPager pager;
 
-    private List<File> files;
-
     SensorHandler sensorHandler;
 
     SensorFragment sensorFragment;
@@ -71,14 +70,14 @@ public class MainActivity extends AppCompatActivity{
         this.sensorFragment = new SensorFragment_();
         this.fileFragment = new FileFragment_();
 
-        this.files = new ArrayList<>(Arrays.asList(FileHandler.getWritableStorageDir(this).listFiles()));
-        Collections.sort(this.files, new Comparator<File>() {
+        List<File> files = new ArrayList<>(Arrays.asList(FileHandler.getWritableStorageDir(this).listFiles()));
+        Collections.sort(files, new Comparator<File>() {
             @Override
             public int compare(File o1, File o2) {
                 return o1.getName().compareTo(o2.getName()) * -1;
             }
         });
-        this.adapter = new FileAdapter(this.files);
+        this.adapter = new FileAdapter(files);
     }
 
     @Override
@@ -163,20 +162,23 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,  @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_ACCESS_FINE_LOCATION:
+
+                /*
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // TODO FIX this.sensorFragment.check_gps.performClick();
+                    TODO FIX this.sensorFragment.check_gps.performClick();
                 } else {
-                    Toast.makeText(this, "Please grant permission to use the gps sensor", Toast.LENGTH_SHORT).show();
-                }
+                    Toast.makeText(this, R.string.permissions_grant_gps, Toast.LENGTH_SHORT).show();
+                } */
+                Toast.makeText(this, R.string.permissions_grant_gps, Toast.LENGTH_SHORT).show();
                 break;
             case PERMISSION_WRITE_EXTERNAL_STORAGE:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     this.sensorFragment.btn_record_stop.performClick();
                 } else {
-                    Toast.makeText(this, "Please grant permission to write to external storage", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.permissions_grant_external_storage, Toast.LENGTH_LONG).show();
                 }
         }
     }

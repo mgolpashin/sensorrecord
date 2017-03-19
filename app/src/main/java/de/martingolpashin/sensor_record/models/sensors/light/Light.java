@@ -12,15 +12,11 @@ import java.util.TimerTask;
 
 import de.martingolpashin.sensor_record.models.Sensor;
 
-/**
- * Created by martin on 16.10.16.
- */
 @EBean
 public class Light extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
     private android.hardware.Sensor lightSensor;
     private float illuminance;
-    private String name = "Light";
 
     public Light(Context context) {
         super(context, "Light", 100, new String[]{"Milliseconds", "Illuminance"});

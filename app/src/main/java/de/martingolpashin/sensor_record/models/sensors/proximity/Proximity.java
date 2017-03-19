@@ -12,15 +12,11 @@ import java.util.TimerTask;
 
 import de.martingolpashin.sensor_record.models.Sensor;
 
-/**
- * Created by martin on 16.10.16.
- */
 @EBean
 public class Proximity extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
     private android.hardware.Sensor proximitySensor;
     private float centimeters;
-    private String name = "Proximity";
 
     public Proximity(Context context) {
         super(context, "Proximity", 100, new String[]{"Milliseconds", "centimeters"});

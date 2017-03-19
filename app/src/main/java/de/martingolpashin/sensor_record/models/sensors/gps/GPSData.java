@@ -4,9 +4,6 @@ import android.location.Location;
 
 import de.martingolpashin.sensor_record.models.SensorData;
 
-/**
- * Created by martin on 14.10.16.
- */
 public class GPSData extends SensorData{
     private long millis;
     private Location location;

@@ -10,10 +10,6 @@ import java.io.FileOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/**
- * Created by martin on 18.03.17.
- */
-
 public class Compress {
     private static final int BUFFER = 2048;
 

@@ -15,9 +15,6 @@ import java.util.Timer;
 
 import de.martingolpashin.sensor_record.R;
 
-/**
- * Created by martin on 16.10.16.
- */
 public class Sensor {
     public Context context;
     public boolean active;
@@ -27,20 +24,17 @@ public class Sensor {
     public Timer timer;
     public ArrayList data;
     private String name;
-    private int defaultValue;
 
     private CheckBox checkBox;
     private EditText editText;
 
     private String[] columns;
-    private String seperator = ",";
     private LinearLayout view;
 
     public Sensor(Context context, String name, int defaultValue, String[] columns) {
         this.context = context;
 
         this.name = name;
-        this.defaultValue = defaultValue;
         this.columns = columns;
 
         this.data = new ArrayList<>();
@@ -86,7 +80,7 @@ public class Sensor {
             for (int i = 0; i < this.columns.length; i++) {
                 head += this.columns[i];
                 if(i < this.columns.length - 1) {
-                    head += seperator;
+                    head += ",";
                 }
             }
             fw.write(head + System.getProperty("line.separator"));

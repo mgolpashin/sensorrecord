@@ -12,9 +12,6 @@ import java.util.TimerTask;
 
 import de.martingolpashin.sensor_record.models.Sensor;
 
-/**
- * Created by martin on 16.10.16.
- */
 @EBean
 public class RotationVector extends Sensor implements SensorEventListener {
     private SensorManager sensorManager;
@@ -24,7 +21,6 @@ public class RotationVector extends Sensor implements SensorEventListener {
     private float z;
     private float cos;
     private float headingAccuracy;
-    private String name = "RotationVector";
 
     public RotationVector(Context context) {
         super(context, "RotationVector", 100, new String[]{"Milliseconds", "X", "Y", "Z", "cos", "headingAccuracy"});
