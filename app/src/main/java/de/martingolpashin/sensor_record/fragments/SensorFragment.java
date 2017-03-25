@@ -96,8 +96,10 @@ public class SensorFragment extends Fragment {
     private boolean hasMinInterval() {
         boolean hasMinInterval = true;
         for(Sensor s : activity.getSensorHandler().getSensors()) {
-            EditText editText = s.getEditText();
-            hasMinInterval = hasMinInterval && !(editText.isEnabled() && editText.getText().toString().equals("") || (Integer.parseInt(editText.getText().toString()) < MIN_INTERVAL));
+            if(s.isActive()) {
+                EditText editText = s.getEditText();
+                hasMinInterval = hasMinInterval && !(editText.isEnabled() && editText.getText().toString().equals("") || (Integer.parseInt(editText.getText().toString()) < MIN_INTERVAL));
+            }
         }
         return hasMinInterval;
     }
