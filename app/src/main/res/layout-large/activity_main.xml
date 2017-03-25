@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/main_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.TabLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        style="@style/AppTabLayout"
+        app:tabTextAppearance="@style/AppTabTextAppearance"
+        android:background="#f44336"
+        app:tabSelectedTextColor="#fff"
+        android:id="@+id/tablayout">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/sensortab"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/tab_sensors"/>
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/filestab"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/tab_files"/>
+
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_below="@id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>
