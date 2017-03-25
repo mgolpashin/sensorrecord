@@ -12,9 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import net.hockeyapp.android.CrashManager;
-import net.hockeyapp.android.UpdateManager;
-
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -81,29 +78,23 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         this.adapter = new FileAdapter(files);
-
-        checkForUpdates();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         app.setCurrentActivity(this);
-        checkForCrashes();
     }
 
     @Override
     protected void onPause() {
         clearReferences();
         super.onPause();
-        unregisterManagers();
     }
 
-    @Override
     protected void onDestroy() {
         clearReferences();
         super.onDestroy();
-        unregisterManagers();
     }
 
     private void clearReferences(){
@@ -194,18 +185,5 @@ public class MainActivity extends AppCompatActivity{
 
     public SensorHandler getSensorHandler() {
         return sensorHandler;
-    }
-
-    private void checkForCrashes() {
-        CrashManager.register(this);
-    }
-
-    private void checkForUpdates() {
-        // Remove this for store builds!
-        UpdateManager.register(this);
-    }
-
-    private void unregisterManagers() {
-        UpdateManager.unregister();
     }
 }
