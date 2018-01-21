@@ -30,7 +30,7 @@
         </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="de.martingolpashin.sensor_record.files"
+            android:authorities="de.martingolpashin.sensor_record.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data
