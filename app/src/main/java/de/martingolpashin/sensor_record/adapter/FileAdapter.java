@@ -74,6 +74,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final File file = files.get(position);
         holder.fileName.setText(file.getName());
+
         if(file.isDirectory()) {
             configureDirectory(holder, file, position);
         } else {
@@ -266,14 +267,14 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 
     private void startIntent(Context context, File file, String action) {
         Intent intent = new Intent(action);
-        Uri fileUri = FileProvider.getUriForFile(context, "de.martingolpashin.sensor_record.files", file);
+        Uri fileUri = FileProvider.getUriForFile(context, "de.martingolpashin.sensor_record.fileprovider", file);
         String mime = context.getContentResolver().getType(fileUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
         switch (action) {
             case Intent.ACTION_SEND:
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                intent.putExtra(Intent.EXTRA_STREAM, fileUri);
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Sensor Record data");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{""});
                 intent.setType(mime);
