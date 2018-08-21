@@ -31,7 +31,7 @@ public class GPS extends Sensor implements GoogleApiClient.ConnectionCallbacks, 
     GoogleApiClient googleApiClient;
 
     public GPS(final Context context) {
-        super(context, "GPS", 100, new String[]{"Milliseconds", "Latitude", "Longitude", "Altitude"});
+        super(context, "GPS", 100, GPSData.getHeadline());
 
         final CheckBox checkBox = getCheckBox();
         checkBox.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +62,8 @@ public class GPS extends Sensor implements GoogleApiClient.ConnectionCallbacks, 
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new GPSData(new Date().getTime() - startDate, lastKnownLocation));
+                    Date now = new Date();
+                    data.add(new GPSData(now, now.getTime() - startDate, lastKnownLocation));
                 }
             }
         }, 0, interval);

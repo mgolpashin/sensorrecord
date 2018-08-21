@@ -20,7 +20,7 @@ public class Pressure extends Sensor implements SensorEventListener {
     private float millibars;
 
     public Pressure(Context context) {
-        super(context, "Pressure", 100, new String[]{"Milliseconds", "Millibars"});
+        super(context, "Pressure", 100, PressureData.getHeadline());
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.pressureSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_PRESSURE);
     }
@@ -31,7 +31,8 @@ public class Pressure extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new PressureData(new Date().getTime() - startDate, millibars));
+                    Date now = new Date();
+                    data.add(new PressureData(now, now.getTime() - startDate, millibars));
                 }
             }
         }, 0, interval);

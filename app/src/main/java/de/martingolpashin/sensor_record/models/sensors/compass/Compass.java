@@ -22,7 +22,7 @@ public class Compass extends Sensor implements SensorEventListener {
     android.hardware.Sensor compass;
 
     public Compass(Context context) {
-        super(context, "Compass", 100, new String[]{"Milliseconds", "X", "Y", "Z"});
+        super(context, "Compass", 100, CompassData.getHeadline());
         this.isRecording = false;
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.compass = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_MAGNETIC_FIELD);
@@ -34,7 +34,8 @@ public class Compass extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new CompassData(new Date().getTime() - startDate, x, y, z));
+                    Date now = new Date();
+                    data.add(new CompassData(now, now.getTime() - startDate, x, y, z));
                 }
             }
         }, 0, interval);

@@ -25,7 +25,7 @@ public class Accelerometer extends Sensor implements SensorEventListener {
     android.hardware.Sensor accelerometer;
 
     public Accelerometer(Context context) {
-        super(context, "Accelerometer", 10, new String[]{"Milliseconds", "X", "Y", "Z"});
+        super(context, "Accelerometer", 10, AccelerometerData.getHeadline());
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER);
     }
@@ -36,7 +36,8 @@ public class Accelerometer extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new AccelerometerData(new Date().getTime() - startDate, x, y, z));
+                    Date now = new Date();
+                    data.add(new AccelerometerData(now, now.getTime() - startDate, x, y, z));
                 }
             }
         }, 0, interval);

@@ -1,12 +1,17 @@
 package de.martingolpashin.sensor_record.models.sensors.pressure;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import de.martingolpashin.sensor_record.models.SensorData;
 
 public class PressureData extends SensorData{
+    private Date timestamp;
     private long millis;
     private float millibars;
 
-    public PressureData(long milliseconds, float millibars) {
+    public PressureData(Date timestamp, long milliseconds, float millibars) {
+        this.timestamp = timestamp;
         this.millis = milliseconds;
         this.millibars = millibars;
     }
@@ -19,8 +24,16 @@ public class PressureData extends SensorData{
         return millibars;
     }
 
+    private String getTimestamp() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(this.timestamp);
+    }
+
+    public static String[] getHeadline() {
+        return new String[]{"Timestamp", "Milliseconds", "Millibars"};
+    }
+
     @Override
     public String toString() {
-        return this.getMillis() + getSeperator() + this.getMillibars() + System.getProperty("line.separator");
+        return this.getTimestamp() + getSeperator() + this.getMillis() + getSeperator() + this.getMillibars() + System.getProperty("line.separator");
     }
 }

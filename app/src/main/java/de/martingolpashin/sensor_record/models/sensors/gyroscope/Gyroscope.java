@@ -22,7 +22,7 @@ public class Gyroscope extends Sensor implements SensorEventListener {
     private android.hardware.Sensor gyroscope;
 
     public Gyroscope(Context context) {
-        super(context, "Gyroscope", 10, new String[]{"Milliseconds", "X", "Y", "Z"});
+        super(context, "Gyroscope", 10, GyroscopeData.getHeadline());
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.gyroscope = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_GYROSCOPE);
     }
@@ -33,7 +33,8 @@ public class Gyroscope extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new GyroscopeData(new Date().getTime() - startDate, x, y, z));
+                    Date now = new Date();
+                    data.add(new GyroscopeData(now, now.getTime() - startDate, x, y, z));
                 }
             }
         }, 0, interval);

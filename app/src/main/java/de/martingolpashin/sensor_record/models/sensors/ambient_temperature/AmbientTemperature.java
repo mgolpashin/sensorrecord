@@ -19,7 +19,7 @@ public class AmbientTemperature extends Sensor implements SensorEventListener {
     private float degree;
 
     public AmbientTemperature(Context context) {
-        super(context, "AmbientTemperature", 100, new String[]{"Milliseconds", "Degrees"});
+        super(context, "AmbientTemperature", 100, AmbientTemperatureData.getHeadline());
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         this.degreeSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_AMBIENT_TEMPERATURE);
     }
@@ -30,7 +30,8 @@ public class AmbientTemperature extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new AmbientTemperatureData(new Date().getTime() - startDate, degree));
+                    Date now = new Date();
+                    data.add(new AmbientTemperatureData(now, now.getTime() - startDate, degree));
                 }
             }
         }, 0, interval);

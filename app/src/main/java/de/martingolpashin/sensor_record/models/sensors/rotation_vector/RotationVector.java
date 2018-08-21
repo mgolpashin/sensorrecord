@@ -23,7 +23,7 @@ public class RotationVector extends Sensor implements SensorEventListener {
     private float headingAccuracy;
 
     public RotationVector(Context context) {
-        super(context, "RotationVector", 100, new String[]{"Milliseconds", "X", "Y", "Z", "cos", "headingAccuracy"});
+        super(context, "RotationVector", 100, RotationVectorData.getHeadline());
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         this.rotationVectorSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ROTATION_VECTOR);
     }
@@ -34,7 +34,8 @@ public class RotationVector extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new RotationVectorData(new Date().getTime() - startDate, x, y, z, cos, headingAccuracy));
+                    Date now = new Date();
+                    data.add(new RotationVectorData(now, now.getTime() - startDate, x, y, z, cos, headingAccuracy));
                 }
             }
         }, 0, interval);

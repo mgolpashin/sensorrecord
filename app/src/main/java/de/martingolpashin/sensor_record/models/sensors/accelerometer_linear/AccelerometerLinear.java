@@ -22,7 +22,7 @@ public class AccelerometerLinear extends Sensor implements SensorEventListener {
     android.hardware.Sensor accelerometer;
 
     public AccelerometerLinear(Context context) {
-        super(context, "AccelerometerLinear", 10, new String[]{"Milliseconds", "X", "Y", "Z"});
+        super(context, "AccelerometerLinear", 10, AccelerometerLinearData.getHeadline());
         this.sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LINEAR_ACCELERATION);
     }
@@ -33,7 +33,8 @@ public class AccelerometerLinear extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new AccelerometerLinearData(new Date().getTime() - startDate, x, y, z));
+                    Date now = new Date();
+                    data.add(new AccelerometerLinearData(now, now.getTime() - startDate, x, y, z));
                 }
             }
         }, 0, interval);

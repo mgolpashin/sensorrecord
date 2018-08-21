@@ -19,7 +19,7 @@ public class Proximity extends Sensor implements SensorEventListener {
     private float centimeters;
 
     public Proximity(Context context) {
-        super(context, "Proximity", 100, new String[]{"Milliseconds", "centimeters"});
+        super(context, "Proximity", 100, ProximityData.getHeadline());
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         this.proximitySensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_PROXIMITY);
     }
@@ -30,7 +30,8 @@ public class Proximity extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new ProximityData(new Date().getTime() - startDate, centimeters));
+                    Date now = new Date();
+                    data.add(new ProximityData(now, now.getTime() - startDate, centimeters));
                 }
             }
         }, 0, interval);

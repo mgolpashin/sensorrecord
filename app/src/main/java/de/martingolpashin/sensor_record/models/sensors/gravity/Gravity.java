@@ -21,7 +21,7 @@ public class Gravity extends Sensor implements SensorEventListener {
     private float z;
 
     public Gravity(Context context) {
-        super(context, "Gravity", 100, new String[]{"Milliseconds", "X", "Y", "Z"});
+        super(context, "Gravity", 100, GravityData.getHeadline());
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         this.gravitySensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_GRAVITY);
     }
@@ -32,7 +32,8 @@ public class Gravity extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new GravityData(new Date().getTime() - startDate, x, y, z));
+                    Date now = new Date();
+                    data.add(new GravityData(now, now.getTime() - startDate, x, y, z));
                 }
             }
         }, 0, interval);

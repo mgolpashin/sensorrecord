@@ -19,7 +19,7 @@ public class Light extends Sensor implements SensorEventListener {
     private float illuminance;
 
     public Light(Context context) {
-        super(context, "Light", 100, new String[]{"Milliseconds", "Illuminance"});
+        super(context, "Light", 100, LightData.getHeadline());
         this.sensorManager = (SensorManager) this.context.getSystemService(Context.SENSOR_SERVICE);
         this.lightSensor = sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_LIGHT);
     }
@@ -30,7 +30,8 @@ public class Light extends Sensor implements SensorEventListener {
             @Override
             public void run() {
                 if (isRecording) {
-                    data.add(new LightData(new Date().getTime() - startDate, illuminance));
+                    Date now = new Date();
+                    data.add(new LightData(now, now.getTime() - startDate, illuminance));
                 }
             }
         }, 0, interval);
