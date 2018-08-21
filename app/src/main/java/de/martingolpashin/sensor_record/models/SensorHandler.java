@@ -16,6 +16,7 @@ import de.martingolpashin.sensor_record.models.sensors.gps.GPS;
 import de.martingolpashin.sensor_record.models.sensors.gravity.Gravity;
 import de.martingolpashin.sensor_record.models.sensors.gyroscope.Gyroscope;
 import de.martingolpashin.sensor_record.models.sensors.light.Light;
+import de.martingolpashin.sensor_record.models.sensors.proximity.Proximity;
 import de.martingolpashin.sensor_record.models.sensors.rotation_vector.RotationVector;
 
 @EBean
@@ -35,6 +36,7 @@ public class SensorHandler {
         this.sensors.add(new Gyroscope(context));
         this.sensors.add(new Light(context));
         this.sensors.add(new Pressure(context));
+        this.sensors.add(new Proximity(context));
         this.sensors.add(new RotationVector(context));
     }
 
