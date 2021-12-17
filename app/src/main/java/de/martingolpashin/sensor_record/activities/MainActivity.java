@@ -3,12 +3,12 @@ package de.martingolpashin.sensor_record.activities;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity{
 
         this.sensorHandler = new SensorHandler(this);
         this.sensorFragment = new SensorFragment_();
-        this.fileFragment = new FileFragment_();
+        this.fileFragment = new FileFragment();
 
         List<File> files = new ArrayList<>(Arrays.asList(FileHandler.getWritableStorageDir(this).listFiles()));
         Collections.sort(files, new Comparator<File>() {

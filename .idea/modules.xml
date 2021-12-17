@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SensorRecord.iml" filepath="$PROJECT_DIR$/SensorRecord.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/SensorRecord.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/SensorRecord.app.iml" />
     </modules>
   </component>
 </project>
